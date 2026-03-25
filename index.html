@@ -3,128 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen Z Personal Take Care Planner</title>
+    <title>Gen Z Morning Bestie Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent-color: #ff6b6b; --text-dark: #2d2d2d; --soft-blue: #e3f2fd; }
-        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: var(--text-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; transition: 0.5s; }
-        .planner-card { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 30px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); position: relative; overflow: hidden; border: 2px solid #fff5f5; }
-        h1 { font-family: 'Itim'; color: var(--accent-color); text-align: center; margin-bottom: 5px; font-size: 32px; }
-        .greeting { text-align: center; font-size: 18px; margin-bottom: 20px; color: #666; font-family: 'Itim'; }
+        :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent: #ff6b6b; --soft-blue: #e3f2fd; --genz-dark: #1a1a1a; }
+        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
-        /* Camera Style */
-        #camera-container { width: 100%; height: 250px; background: #f0f0f0; border-radius: 20px; margin-bottom: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 3px dashed #ffb7c5; }
-        #video { width: 100%; height: 100%; object-fit: cover; }
-        .captured-image { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .btn-camera { background: #ffb7c5; color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; margin-bottom: 20px; font-family: 'Itim'; font-size: 18px; box-shadow: 0 4px 10px rgba(255,183,197,0.4); }
+        /* Planner Card */
+        .planner-card { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 35px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid #fff0f0; }
+        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; margin-bottom: 5px; font-size: 30px; }
+        .greeting { text-align: center; font-size: 16px; margin-bottom: 20px; color: #777; font-family: 'Itim'; }
 
-        /* Section Style */
-        .section-box { background: #fffcfc; padding: 15px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #fff0f0; }
-        .section-title { font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; color: #ff8585; }
-        input, textarea, select { width: 100%; border: none; border-bottom: 2px solid #f0f0f0; padding: 8px; font-family: 'Kanit'; outline: none; background: transparent; font-size: 15px; color: #555; }
+        /* Camera Snapshot */
+        #camera-area { width: 100%; height: 280px; background: #f0f0f0; border-radius: 25px; margin-bottom: 15px; overflow: hidden; position: relative; border: 2px dashed #ffb7c5; display: flex; align-items: center; justify-content: center; }
+        #video { width: 100%; height: 100%; object-fit: cover; }
+        #photo-result { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .btn-snap { background: #ffb7c5; color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; margin: 10px 0 20px; font-family: 'Itim'; font-size: 18px; }
+
+        /* Take Care Sections */
+        .box { background: #fffcfc; padding: 18px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #fff5f5; }
+        .box-title { font-weight: 500; margin-bottom: 12px; color: #ff8585; display: flex; align-items: center; gap: 8px; }
+        input, select, textarea { width: 100%; border: none; border-bottom: 2px solid #f5f5f5; padding: 8px; font-family: 'Kanit'; outline: none; background: transparent; }
         
-        /* Health Score */
-        .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .care-bubble { background: var(--soft-blue); padding: 12px; border-radius: 15px; color: #0c5460; font-size: 14px; margin-top: 10px; border-left: 5px solid #90caf9; line-height: 1.5; }
+        .poem-box { font-family: 'Itim'; font-size: 18px; text-align: center; color: #ff8585; line-height: 1.6; padding: 10px; border: 1px dashed #ffb7c5; border-radius: 15px; margin-bottom: 15px; }
+        .care-tip { background: var(--soft-blue); padding: 12px; border-radius: 15px; font-size: 14px; margin-top: 10px; border-left: 5px solid #90caf9; }
         
-        /* Music & Buttons */
-        .music-player { margin-top: 10px; width: 100%; border-radius: 15px; height: 80px; background: #000; }
-        .btn-save { width: 100%; background: var(--accent-color); color: white; border: none; padding: 15px; border-radius: 50px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; font-family: 'Itim'; }
+        /* Music UI */
+        .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 550px; border-radius: 25px; padding: 20px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .player-frame { width: 100%; height: 120px; border-radius: 15px; background: #000; overflow: hidden; }
         
-        .reminder-text { color: #ff6b6b; font-weight: bold; font-size: 14px; margin-top: 8px; text-align: center; }
+        .btn-save { width: 100%; max-width: 550px; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 50px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; font-family: 'Itim'; }
     </style>
 </head>
 <body>
 
 <div class="planner-card" id="capture-area">
-    <h1>✨ Morning Booster! ✨</h1>
-    <div class="greeting" id="time-display">อรุณสวัสดิ์จ้า...</div>
+    <h1>☀️ Morning Bestie ☀️</h1>
+    <div class="greeting" id="time-now">กำลังโหลดเวลา...</div>
 
-    <div id="camera-container">
+    <div class="poem-box">
+        "เริ่มต้นเช้าวันใหม่ด้วยใจใส<br>เหนื่อยแค่ไหนขอให้ยิ้มสู้ต่อ<br>เก่งที่สุดแล้วคนดีไม่ต้องท้อ<br>ฉันจะรอส่งใจให้ในทุกวัน"
+    </div>
+
+    <div id="camera-area">
         <video id="video" autoplay playsinline></video>
-        <img id="photo-result" class="captured-image">
+        <img id="photo-result">
     </div>
-    <center><button class="btn-camera" onclick="takeSnapshot()">📸 แชะ! ถ่ายรูปเช้านี้หน่อยคนเก่ง</button></center>
+    <center><button class="btn-snap" onclick="takePhoto()">📸 แชะ! บันทึกความสดใสเช้านี้</button></center>
 
-    <div class="section-box">
-        <div class="section-title">📊 เช้านี้เป็นยังไงบ้าง?</div>
-        <div class="score-grid">
+    <div class="box">
+        <div class="box-title">📊 สุขภาพวันนี้ (เช็กหน่อยซิ!)</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div>
-                <label style="font-size: 13px;">ระดับความง่วง 💤</label>
-                <select id="sleepy"><option>1 (ตื่นเต็มตา!)</option><option>5 (ยังเบลอๆ)</option><option>10 (อยากนอนต่อมากกก)</option></select>
+                <label style="font-size: 12px;">คะแนนความง่วง 💤</label>
+                <select id="sleep"><option>10 (อยากนอนต่อมาก)</option><option>5 (ตื่นแบบงงๆ)</option><option>1 (สดชื่นจัด!)</option></select>
             </div>
             <div>
-                <label style="font-size: 13px;">ฟีลลิ่งตอนนี้ 🌈</label>
-                <select id="stress"><option>ผ่อนคลาย Chill</option><option>เครียดนิดหน่อย</option><option>ตึงจัด!</option></select>
+                <label style="font-size: 12px;">เลเวลความเครียด 🌈</label>
+                <select id="stress"><option>ผ่อนคลาย Chill</option><option>เครียดนิดๆ</option><option>ตึงมาก!</option></select>
             </div>
         </div>
-        
-        <div class="care-bubble" id="care-message">
-            🥤 "เช้านี้รับ 'นม' เย็นๆ สักแก้วไหม? หรือถ้าไม่ตื่น 'น้ำอัดลม' สักนิดให้ซ่าถึงใจดีนะ!"
+        <div class="care-tip">
+            🥤 <b>แนะเช้านี้:</b> ถ้ายังง่วง "น้ำอัดลม" สักนิดให้ตื่น หรือ "นม" เย็นๆ สักขวดรองท้องนะ!
         </div>
-        <div class="care-bubble" style="background: #e8f5e9; color: #2e7d32; border-left: 5px solid #a5d6a7;">
-            🍱 "ถ้าท้องว่าง ไปหาอะไรกินที่โรงประกอบกันนะ กินแล้วมีความสุขแน่นอน ลุย!"
+        <div class="care-tip" style="background: #e8f5e9; color: #2e7d32; border-left: 5px solid #a5d6a7;">
+            🍱 <b>หิวไหม:</b> "ไปกินข้าวที่โรงประกอบกันนะ กินแล้วมีความสุขแน่นอน ลุย!"
         </div>
-        <div class="reminder-text">อย่าลืมดื่มน้ำเยอะๆ น้า ยิ้มให้ตัวเองในกระจกด้วยล่ะ! 😊</div>
     </div>
 
-    <div class="section-box">
-        <div class="section-title">📝 วันนี้มีอะไรให้ช่วยไหม?</div>
-        <input type="text" placeholder="1. งานที่ต้องจัดการวันนี้...">
-        <input type="text" placeholder="2. เรื่องสำคัญห้ามลืม...">
-        <div style="color: #d32f2f; font-size: 13px; margin-top:10px; font-weight: bold;">⚠️ เตือนสติ: "ส่งผ้าหรือยังจ๊ะ? เดี๋ยวไม่มีผ้าใส่นะะะ!"</div>
+    <div class="box">
+        <div class="box-title">📝 วันนี้มีงานอะไรบ้าง?</div>
+        <input type="text" placeholder="1. งานที่ต้องทำวันนี้...">
+        <input type="text" placeholder="2. เรื่องสำคัญอื่นๆ...">
+        <div style="color: #2196f3; font-weight: bold; margin-top: 15px; text-align: center; font-size: 15px;">
+            💧 อย่าลืมดื่มน้ำเยอะๆ น้า! ร่างกายจะได้สดชื่น <br>ยิ้มเยอะๆ นะคนเก่ง 😊
+        </div>
     </div>
 
-    <div class="section-box">
-        <div class="section-title">☁️ ระบายให้ฟังได้นะ</div>
-        <textarea placeholder="พิมพ์ความในใจทิ้งไว้ตรงนี้ได้เลย..."></textarea>
+    <div class="box">
+        <div class="box-title">☁️ บันทึกความในใจ</div>
+        <textarea placeholder="ระบายสิ่งที่อยู่ในใจออกมาได้เลยนะ..."></textarea>
     </div>
 </div>
 
-<button class="btn-save" onclick="exportImage()">📥 บันทึกรูปเก็บไว้ดู (แชร์ได้เลย!)</button>
+<button class="btn-save" onclick="saveImage()">📥 บันทึกรูปเก็บไว้ดู (Keep Sharing!)</button>
 
-<div style="margin-top: 30px; width: 100%; max-width: 600px; text-align: center;">
-    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">🎵 Gen Z Booster Playlist (เปลี่ยนเพลงเองได้เลย)</p>
-    <iframe class="music-player" src="https://www.youtube.com/embed/Iu6g6a9KVHA?playlist=Iu6g6a9KVHA,aj6itxnuXHs,0I4Pi-spMFk,aBuK_dMi68c,6vh3K5wqRz4&autoplay=1&loop=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<div class="music-card">
+    <div style="margin-bottom: 10px; font-size: 14px; text-align: center;">🎵 Gen Z Booster Playlist (กดถัดเพลงได้เลย)</div>
+    <div class="player-frame">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1" 
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div style="font-size: 11px; margin-top: 10px; color: #888; text-align: center;">*หมายเหตุ: ใน Playlist รวมเพลงจากลิ้งที่คุณให้มาทั้งหมดแล้วครับ*</div>
 </div>
 
 <script>
-    // อัปเดตเวลาและคำทักทาย
-    function updateTime() {
+    // แสดงเวลา
+    function updateClock() {
         const now = new Date();
-        const hrs = now.getHours();
-        let greet = "อรุณสวัสดิ์จ้าคนเก่ง";
-        if (hrs >= 12) greet = "เที่ยงแล้ว หาอะไรอร่อยๆ กินนะ";
-        if (hrs >= 16) greet = "เย็นแล้วนะ พักผ่อนบ้าง";
-        
-        document.getElementById('time-display').innerText = greet + " | " + now.toLocaleTimeString('th-TH') + " น.";
+        document.getElementById('time-now').innerText = "วันนี้ " + now.toLocaleDateString('th-TH') + " | " + now.toLocaleTimeString('th-TH') + " น.";
     }
-    setInterval(updateTime, 1000);
+    setInterval(updateClock, 1000);
 
-    // ระบบกล้อง
+    // ระบบถ่ายรูป
     const video = document.getElementById('video');
     const photoResult = document.getElementById('photo-result');
 
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
         .then(stream => { video.srcObject = stream; })
-        .catch(err => { alert("เปิดกล้องไม่ได้จ้า ลองเช็ก Permission ดูนะ!"); });
+        .catch(err => { alert("เปิดกล้องไม่ได้ ลองเช็กสิทธิ์เข้าถึงกล้องนะจ๊ะ!"); });
 
-    function takeSnapshot() {
+    function takePhoto() {
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
-        const data = canvas.toDataURL('image/png');
-        photoResult.src = data;
+        photoResult.src = canvas.toDataURL('image/png');
         photoResult.style.display = 'block';
         video.style.display = 'none';
     }
 
-    // เซฟเป็นรูปภาพ
-    function exportImage() {
+    // เซฟภาพ
+    function saveImage() {
         const area = document.getElementById('capture-area');
-        html2canvas(area, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
+        html2canvas(area, { useCORS: true, scale: 2 }).then(canvas => {
             const link = document.createElement('a');
             link.download = 'My-Zen-Morning.png';
             link.href = canvas.toDataURL('image/png');
