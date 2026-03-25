@@ -6,15 +6,13 @@
     <title>Minimal Student Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Mitr:wght@300&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <style>
         :root {
-            --bg-color: #fdfaf5; /* สีครีมละมุน */
-            --accent-green: #9fb8ad; /* สีเขียวหม่นสบายตา */
+            --bg-color: #fdfaf5;
+            --accent-green: #9fb8ad;
             --soft-pink: #f4dada;
             --text-main: #5a5a5a;
         }
-
         body {
             font-family: 'Itim', cursive;
             background-color: var(--bg-color);
@@ -24,182 +22,107 @@
             padding: 40px 20px;
             color: var(--text-main);
         }
-
-        /* กล่องแพลนเนอร์ */
-        #planner-box {
-            background-color: #ffffff;
-            width: 380px;
+        .container {
+            background: white;
             padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.03);
-            border: 1px solid #eee;
-        }
-
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { font-size: 1.8rem; margin: 0; color: var(--accent-green); }
-        .header p { font-size: 0.9rem; margin: 5px 0; opacity: 0.7; }
-
-        .section-title {
-            font-size: 1.1rem;
-            border-bottom: 2px solid var(--accent-green);
-            display: inline-block;
-            margin-bottom: 12px;
-            margin-top: 20px;
-        }
-
-        /* ตารางเวลาแบบพิมพ์เอง */
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        input[type="text"], textarea {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 500px;
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #f0f0f0;
-            border-radius: 12px;
-            font-family: 'Itim', cursive;
-            font-size: 15px;
-            background: #fafafa;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
+            text-align: center;
         }
-
-        input:focus { border-color: var(--accent-green); background: #fff; }
-
-        .todo-list { list-style: none; padding: 0; }
-        .todo-item { display: flex; align-items: center; margin-bottom: 8px; }
-        .todo-item input[type="checkbox"] { margin-right: 10px; accent-color: var(--accent-green); }
-
-        /* ปุ่มกด */
-        .controls { margin-top: 30px; text-align: center; }
+        h1 { color: var(--accent-green); margin-bottom: 20px; }
+        textarea {
+            width: 100%;
+            height: 150px;
+            border: 2px dashed var(--soft-pink);
+            border-radius: 15px;
+            padding: 15px;
+            font-family: 'Itim', cursive;
+            font-size: 18px;
+            resize: none;
+            outline: none;
+            box-sizing: border-box;
+        }
         .btn-save {
+            margin-top: 20px;
             background-color: var(--accent-green);
             color: white;
-            padding: 15px 35px;
-            border-radius: 50px;
             border: none;
-            font-family: 'Mitr', sans-serif;
-            font-size: 1rem;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 18px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(159, 184, 173, 0.4);
             transition: 0.3s;
         }
-        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(159, 184, 173, 0.5); }
-
-        .footer-logo { text-align: center; font-size: 0.7rem; color: #ddd; margin-top: 30px; }
+        .btn-save:hover { background-color: #8da398; transform: scale(1.05); }
+        
+        /* สไตล์ส่วนดนตรีและคำคม */
+        .safe-zone-panel {
+            position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+            background: rgba(255,255,255,0.9); padding: 15px; border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
+            width: 280px; text-align: left;
+        }
     </style>
 </head>
-    <div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); backdrop-filter: blur(10px); width: 280px; font-family: 'Kanit', sans-serif;">
-    
+<body>
+
+<div class="container" id="planner-box">
+    <h1>✿ วันนี้เป็นยังไงบ้าง? ✿</h1>
+    <p>เขียนบันทึกความรู้สึก หรือแผนของวันนี้ลงไปนะ</p>
+    <textarea placeholder="พิมพ์ตรงนี้ได้เลย..."></textarea>
+    <br>
+    <button class="btn-save" onclick="saveAsImage()">📸 บันทึกเป็นรูปภาพ</button>
+</div>
+
+<div class="safe-zone-panel">
     <div id="quote-box" style="background: #fff5f7; padding: 12px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid #ffb7c5;">
-        <p id="quote-text" style="margin: 0; font-size: 14px; color: #5a5a5a; line-height: 1.5;">"วันนี้คุณเก่งมากแล้วนะ พักผ่อนบ้างนะคนดี"</p>
-        <button onclick="randomQuote()" style="margin-top: 8px; background: #ffb7c5; color: white; border: none; padding: 4px 10px; border-radius: 10px; font-size: 11px; cursor: pointer; transition: 0.3s;">✨ ขอคำให้กำลังใจหน่อย</button>
+        <p id="quote-text" style="margin: 0; font-size: 14px;">"วันนี้คุณเก่งมากแล้วนะ พักผ่อนบ้างนะคนดี"</p>
+        <button onclick="randomQuote()" style="margin-top: 8px; background: #ffb7c5; color: white; border: none; padding: 4px 10px; border-radius: 10px; font-size: 11px; cursor: pointer;">✨ ขอคำให้กำลังใจ</button>
     </div>
-
-    <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px; color: #5a5a5a;">🎧 เลือกบรรยากาศที่คุณชอบ:</div>
-    
-    <select id="musicSelect" onchange="changeMusic()" style="width: 100%; padding: 8px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer; font-size: 13px;">
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎵 Lofi สบายๆ (ทำงาน)</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🎹 เปียโนนุ่มนวล (พักผ่อน)</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">🌊 เสียงคลื่นทะเล (บำบัด)</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">🍃 เสียงนกในป่า (สดชื่น)</option>
+    <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px;">🎧 เลือกบรรยากาศ:</div>
+    <select id="musicSelect" onchange="changeMusic()" style="width: 100%; padding: 8px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer;">
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎵 Lofi สบายๆ</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🎹 เปียโนนุ่มนวล</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">🌊 เสียงคลื่นทะเล</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">🍃 เสียงนกในป่า</option>
     </select>
-
     <audio id="myAudio" controls loop style="height: 30px; width: 100%;">
         <source id="audioSource" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
-
-    <script>
-        const quotes = [
-            "วันนี้เธอทำเต็มที่แล้วนะ ภูมิใจในตัวเธอจัง",
-            "เหนื่อยก็พักนะ พรุ่งนี้ค่อยเริ่มใหม่ก็ได้ ไม่สายไปหรอก",
-            "เก่งมากที่ผ่านวันนี้มาได้ เธอสุดยอดที่สุดเลย!",
-            "อย่าลืมใจดีกับตัวเองให้เหมือนที่ใจดีกับคนอื่นนะ",
-            "ความสุขเล็กๆ ระหว่างวัน ก็คือความสำเร็จอย่างหนึ่งนะ",
-            "พักหายใจลึกๆ สักนิด แล้วค่อยๆ เดินต่อเนาะ",
-            "โลกนี้โชคดีจังที่มีเธออยู่ ยิ้มเยอะๆ นะ"
-        ];
-
-        function randomQuote() {
-            const textElement = document.getElementById('quote-text');
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            textElement.innerText = '"' + quotes[randomIndex] + '"';
-        }
-
-        function changeMusic() {
-            var audio = document.getElementById('myAudio');
-            var source = document.getElementById('audioSource');
-            var select = document.getElementById('musicSelect');
-            source.src = select.value;
-            audio.load();
-            audio.play();
-        }
-    </script>
 </div>
 
-<body>
+<script>
+    // ฟังก์ชันบันทึกรูป
+    function saveAsImage() {
+        const element = document.getElementById("planner-box");
+        html2canvas(element).then(canvas => {
+            const link = document.createElement("a");
+            link.download = "my-zen-planner.png";
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
 
-    <div id="planner-box">
-        <div class="header">
-            <h1>Today's Flow ☁️</h1>
-            <p>ค่อยๆ ทำไปทีละอย่างนะ เธอเก่งมากแล้ว</p>
-        </div>
+    // ฟังก์ชันคำคม
+    const quotes = ["วันนี้เธอทำเต็มที่แล้วนะ", "เหนื่อยก็พักนะ พรุ่งนี้ค่อยเริ่มใหม่", "เก่งมากที่ผ่านวันนี้มาได้!", "อย่าลืมใจดีกับตัวเองนะ", "พักหายใจลึกๆ สักนิดนะ"];
+    function randomQuote() {
+        const textElement = document.getElementById('quote-text');
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        textElement.innerText = '"' + quotes[randomIndex] + '"';
+    }
 
-        <div class="section-title">Schedule</div>
-        <div class="schedule-grid">
-            <input type="text" value="07:00" placeholder="เวลา">
-            <input type="text" placeholder="ตื่นนอน / เริ่มวันใหม่">
-            <input type="text" value="09:00" placeholder="เวลา">
-            <input type="text" placeholder="เข้าเรียน / ทำงาน">
-            <input type="text" value="12:00" placeholder="เวลา">
-            <input type="text" placeholder="พักกินข้าวอร่อยๆ">
-            <input type="text" value="19:00" placeholder="เวลา">
-            <input type="text" placeholder="Self-care / พักผ่อน">
-        </div>
-
-        <div class="section-title">Top Priorities</div>
-        <div class="todo-list">
-            <div class="todo-item"><input type="checkbox"> <input type="text" placeholder="งานชิ้นสำคัญที่ 1"></div>
-            <div class="todo-item"><input type="checkbox"> <input type="text" placeholder="งานชิ้นสำคัญที่ 2"></div>
-        </div>
-
-        <div class="section-title">Daily Feel</div>
-        <textarea rows="3" placeholder="วันนี้มีอะไรอยากระบายไหม? เขียนตรงนี้ได้เลยนะ..."></textarea>
-
-        <p style="text-align: right; font-size: 0.8rem; margin-top: 15px; color: var(--accent-green);">
-            #ใจดีกับตัวเองบ้างนะ ✨
-        </p>
-    </div>
-
-    <div class="controls">
-        <button class="btn-save" onclick="saveAsImage()">📸 บันทึกเป็นรูปภาพ</button>
-        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.5;">*รูปจะถูกบันทึกลงในเครื่องของเธอ*</p>
-    </div>
-
-    <div class="footer-logo">Student Zen Planner v1.0</div>
-
-    <script>
-        function saveAsImage() {
-            const planner = document.getElementById('planner-box');
-            
-            // ปรับแต่งเล็กน้อยก่อนเซฟเพื่อความสวยงาม
-            html2canvas(planner, {
-                backgroundColor: "#fdfaf5",
-                scale: 3, // ชัดระดับ HD
-                useCORS: true,
-                borderRadius: 30
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'My-Daily-Flow.png';
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            });
-        }
-    </script>
+    // ฟังก์ชันเปลี่ยนเพลง
+    function changeMusic() {
+        var audio = document.getElementById('myAudio');
+        var source = document.getElementById('audioSource');
+        var select = document.getElementById('musicSelect');
+        source.src = select.value;
+        audio.load();
+        audio.play();
+    }
+</script>
 
 </body>
 </html>
