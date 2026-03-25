@@ -6,16 +6,18 @@
     <title>Gen Z Ultimate Printer Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
     <style>
         :root { --main-bg: #fdfaf5; --accent: #ff6b6b; --printer-pink: #ffb7c5; --rose-gold: #b5838d; --soft-blue: #e3f2fd; --neon-pink: #ff2d55; }
         body { font-family: 'Kanit', sans-serif; background: var(--main-bg); display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; min-height: 100vh; }
 
-        /* หน้าจอก่อนเข้า (ปลดล็อกเสียง) */
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--printer-pink); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .start-btn { padding: 25px 50px; font-size: 26px; font-family: 'Itim'; background: white; color: var(--accent); border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #ff8fa3; transition: 0.2s; }
+        /* หน้าจอกดเริ่มเพื่อปลดล็อกทุกอย่าง */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--printer-pink); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .start-btn { padding: 25px 50px; font-size: 28px; font-family: 'Itim'; background: white; color: var(--accent); border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #ff8fa3; transition: 0.2s; }
         .start-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 #ff8fa3; }
 
-        /* 📜 แผ่น Planner (จะถูกบันทึก) */
+        /* 📜 แผ่น Planner */
         .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 2.5px solid var(--rose-gold); position: relative; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
         h1 { font-family: 'Itim'; color: var(--accent); text-align: center; font-size: 32px; margin: 0 0 10px; }
         
@@ -29,13 +31,7 @@
         #photo-result { display: none; position: absolute; top:0; left:0; }
         .poem { flex: 1; font-family: 'Itim'; font-size: 16px; color: #6d6875; text-align: center; background: #fff9f9; padding: 12px; border-radius: 20px; border: 1.5px dashed var(--printer-pink); }
 
-        /* ⏰ Sleep & Wake Up Section */
-        .sleep-calc { background: var(--soft-blue); padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #b3e5fc; }
-        .sleep-calc h3 { margin: 0 0 10px; font-size: 16px; color: #0288d1; display: flex; align-items: center; gap: 8px; }
-        .sleep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .sleep-grid select, .sleep-grid input { padding: 8px; border-radius: 10px; border: 1px solid #ccc; font-family: 'Kanit'; }
-
-        /* 📅 Detailed Schedule */
+        /* 📅 Schedule & Sleep Advisor */
         .box { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #f0f0f0; }
         .box-title { font-weight: 700; color: var(--accent); margin-bottom: 10px; font-size: 17px; }
         .time-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid #f9f9f9; padding-bottom: 5px; }
@@ -48,20 +44,21 @@
         .printer-3d::before { content: ''; position: absolute; top: -18px; left: 15px; width: 70px; height: 20px; background: #ffe4e8; border-radius: 8px 8px 0 0; }
         .printer-3d::after { content: ''; position: absolute; top: 20px; left: 20px; width: 60px; height: 8px; background: #ff8fa3; border-radius: 10px; }
         .print-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 15px; font-size: 18px; }
-        .print-btn-container:hover { transform: translateY(-5px) scale(1.1); }
 
+        /* Music Card */
         .music-card { background: #1a1a1a; width: 100%; max-width: 500px; border-radius: 30px; padding: 20px; border: 3px solid var(--neon-pink); margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <h1 style="color:white; font-family:'Itim'; margin-bottom:30px;">Let's Start Your Day! 🌟</h1>
-    <button class="start-btn" onclick="startApp()">กดเพื่อเริ่มซิ่ง & ฟังเพลง! 🎵</button>
+    <h1 style="color:white; font-family:'Itim'; margin-bottom:20px;">Let's Get Started! 🌟</h1>
+    <p style="color:white; font-family:'Kanit'; margin-bottom:30px;">กดเพื่อเปิดกล้อง & ฟังเพลงซิ่งๆ ทันที</p>
+    <button class="start-btn" onclick="startEverything()">เริ่มเลย! 🎵📸</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
-    <h1>🎀 My Ultimate Day Plan</h1>
+    <h1>🎀 My Morning Planner</h1>
     
     <div class="header-info">
         <input type="text" placeholder="🧸 แพลนเนอร์ของ..." id="owner">
@@ -75,97 +72,97 @@
             <img id="photo-result">
         </div>
         <div class="poem">
-            "วันนี้คือโอกาสใหม่<br>ทำทุกนาทีให้มีความสุข<br>คนเก่งของฉัน สู้ๆ นะ!"
+            "ยิ้มให้ตัวเองเยอะๆ นะคนเก่ง<br>วันนี้ทำทุกอย่างให้เต็มที่<br>ฉันส่งกำลังใจให้เสมอ!"
             <button onclick="takeSnap()" style="margin-top:8px; border:none; background:var(--accent); color:white; border-radius:50px; padding:5px 15px; font-family:'Itim'; cursor:pointer;">📸 แชะ!</button>
         </div>
     </div>
 
-    <div class="sleep-calc">
-        <h3>⏰ Morning Routine & Sleep</h3>
-        <div class="sleep-grid">
-            <div>
-                <label style="font-size: 12px;">เวลาตื่น:</label>
-                <input type="time" id="wake-time" onchange="suggestSleep()">
-            </div>
-            <div id="sleep-suggest" style="font-size: 11px; color: #444; line-height: 1.3;">
-                ใส่เวลาตื่นเพื่อดูเวลาควรนอนนะ 💤
-            </div>
+    <div class="box" style="background: var(--soft-blue); border-color:#b3e5fc;">
+        <div class="box-title" style="color:#0288d1;">⏰ Sleep Advisor</div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <label style="font-size:12px;">ตื่นกี่โมง:</label>
+            <input type="time" id="wake-time" onchange="updateSleep()" style="border-bottom:1px solid #0288d1; width:80px;">
+            <div id="sleep-note" style="font-size:11px; color:#444;">ระบุเวลาตื่นเพื่อรับคำแนะนำนะ 💤</div>
         </div>
     </div>
 
     <div class="box">
         <div class="box-title">📅 Full Day Schedule</div>
-        <div class="time-row"><b>07:00</b><input type="text" placeholder="Wake up & Start!"></div>
-        <div class="time-row"><b>09:00</b><input type="text" placeholder="Learning / Working..."></div>
-        <div class="time-row"><b>12:00</b><input type="text" placeholder="Lunch Break 🍱"></div>
-        <div class="time-row"><b>14:00</b><input type="text" placeholder="Focus Time..."></div>
-        <div class="time-row"><b>17:00</b><input type="text" placeholder="Workout / Chill..."></div>
-        <div class="time-row"><b>19:00</b><input type="text" placeholder="Dinner & Family"></div>
+        <div class="time-row"><b>07:00</b><input type="text" placeholder="ตื่นนอน & ดื่มน้ำ"></div>
+        <div class="time-row"><b>09:00</b><input type="text" placeholder="เริ่มงาน / เริ่มเรียน"></div>
+        <div class="time-row"><b>12:00</b><input type="text" placeholder="พักเที่ยง 🍱"></div>
+        <div class="time-row"><b>15:00</b><input type="text" placeholder="หาอะไรอร่อยๆ รองท้อง"></div>
+        <div class="time-row"><b>18:00</b><input type="text" placeholder="ออกกำลังกาย / พักผ่อน"></div>
         <div class="time-row"><b>21:00</b><input type="text" placeholder="Skincare & Relax"></div>
-        <div class="time-row"><b>23:00</b><input type="text" placeholder="Sweet Dreams 😴"></div>
+        <div class="time-row"><b>23:00</b><input type="text" placeholder="Good Night 😴"></div>
     </div>
 
-    <div class="box" style="background: #fff0f5;">
-        <div class="box-title">💖 Top Priorities</div>
-        <input type="text" placeholder="✨ 1. ................................" style="margin-bottom:5px;">
-        <input type="text" placeholder="✨ 2. ................................" style="margin-bottom:5px;">
-        <input type="text" placeholder="✨ 3. ................................">
-    </div>
-
-    <div style="text-align: center; color: var(--rose-gold); font-family: 'Itim'; font-size: 14px;">
-        🥤 วันนี้อย่าลืมดื่ม Ovaltine อุ่นๆ นะคนเก่ง!
+    <div style="text-align: center; color: var(--rose-gold); font-family: 'Itim'; font-size: 14px; margin-top:10px;">
+        🥤 วันนี้อย่าลืมเครื่องดื่มอุ่นๆ สักแก้วนะคนเก่ง!
     </div>
 </div>
 
 <div class="print-btn-container" onclick="doPrint()">
     <div class="printer-3d"></div>
-    <div class="print-text">ปริ้นท์แพลนเนอร์สุดพรีเมียม ✨</div>
+    <div class="print-text">ปริ้นท์แพลนเนอร์เลยจ้า ✨</div>
 </div>
 
 <div class="music-card">
-    <div id="player-ui" style="height:150px; border-radius:20px; overflow:hidden;"></div>
+    <div id="youtube-player" style="border-radius:20px; overflow:hidden; width:100%; height:150px;"></div>
 </div>
 
 <script>
-    document.getElementById('date-now').innerText = "วันที่: " + new Date().toLocaleDateString('th-TH');
+    document.getElementById('date-now').innerText = new Date().toLocaleDateString('th-TH');
 
-    function startApp() {
+    let player;
+    // โหลด YouTube Player
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player', {
+            height: '150',
+            width: '100%',
+            videoId: 'mJ4p_2o6Y-Z7iO_4LpY', // ID เพลง (ปรับเปลี่ยนได้)
+            playerVars: {
+                'listType': 'playlist',
+                'list': 'PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY',
+                'autoplay': 0,
+                'controls': 1
+            }
+        });
+    }
+
+    function startEverything() {
+        // 1. ซ่อนหน้า Overlay
         document.getElementById('overlay').style.display = 'none';
-        // Auto-play Music
-        document.getElementById('player-ui').innerHTML = `
-            <iframe width="100%" height="100%" 
-                src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1" 
-                frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
+
+        // 2. สั่งเล่นเพลงทันทีผ่าน API (เบราว์เซอร์จะยอมเพราะมีการคลิกปุ่ม Start)
+        if (player && player.playVideo) {
+            player.playVideo();
+        }
+
+        // 3. เริ่มระบบกล้อง
         initCamera();
     }
 
-    // ระบบแนะนำการนอน (90-min cycles)
-    function suggestSleep() {
-        const wake = document.getElementById('wake-time').value;
-        if(!wake) return;
-        const [h, m] = wake.split(':').map(Number);
-        const wakeDate = new Date();
-        wakeDate.setHours(h, m, 0);
-
-        // คำนวณถอยหลัง 5 และ 6 รอบ (7.5 และ 9 ชม.)
-        const sleep6 = new Date(wakeDate.getTime() - (9 * 60 * 60 * 1000));
-        const sleep5 = new Date(wakeDate.getTime() - (7.5 * 60 * 60 * 1000));
-
-        document.getElementById('sleep-suggest').innerHTML = `
-            ควรเข้านอนตอน: <br>
-            <b>${sleep6.getHours().toString().padStart(2,'0')}:${sleep6.getMinutes().toString().padStart(2,'0')}</b> (ดีที่สุด) <br>
-            หรือ <b>${sleep5.getHours().toString().padStart(2,'0')}:${sleep5.getMinutes().toString().padStart(2,'0')}</b>
-        `;
+    // ระบบคำนวณการนอน
+    function updateSleep() {
+        const time = document.getElementById('wake-time').value;
+        if(!time) return;
+        const [h, m] = time.split(':').map(Number);
+        let d = new Date();
+        d.setHours(h, m, 0);
+        let s6 = new Date(d.getTime() - (9 * 60 * 60 * 1000));
+        let s5 = new Date(d.getTime() - (7.5 * 60 * 60 * 1000));
+        document.getElementById('sleep-note').innerHTML = `ควรนอนตอน: <b>${s6.getHours()}:${s6.getMinutes().toString().padStart(2,'0')}</b> หรือ <b>${s5.getHours()}:${s5.getMinutes().toString().padStart(2,'0')}</b>`;
     }
 
+    // ระบบกล้อง
     const video = document.getElementById('video');
     const photoImg = document.getElementById('photo-result');
-    
     async function initCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-        } catch (err) { alert("อนุญาตให้เข้าถึงกล้องด้วยนะจ๊ะ"); }
+        } catch (err) { console.log("Camera error"); }
     }
 
     function takeSnap() {
@@ -180,22 +177,10 @@
     function doPrint() {
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
-            const ctx = canvas.getContext('2d');
-            
-            // เพิ่ม Paper Texture HD
-            const texture = new Image();
-            texture.src = 'https://www.transparenttextures.com/patterns/pinstriped-brown-paper.png';
-            texture.onload = () => {
-                ctx.globalCompositeOperation = 'multiply';
-                ctx.globalAlpha = 0.3;
-                ctx.fillStyle = ctx.createPattern(texture, 'repeat');
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                const link = document.createElement('a');
-                link.download = 'Premium-Planner.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            };
+            const link = document.createElement('a');
+            link.download = 'My-Zen-Planner.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         });
     }
 </script>
