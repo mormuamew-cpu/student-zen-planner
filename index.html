@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Student Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Mitr:wght@300&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #fdfaf5; /* สีครีมละมุน */
+            --accent-green: #9fb8ad; /* สีเขียวหม่นสบายตา */
+            --soft-pink: #f4dada;
+            --text-main: #5a5a5a;
+        }
+
+        body {
+            font-family: 'Itim', cursive;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: var(--text-main);
+        }
+
+        /* กล่องแพลนเนอร์ */
+        #planner-box {
+            background-color: #ffffff;
+            width: 380px;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { font-size: 1.8rem; margin: 0; color: var(--accent-green); }
+        .header p { font-size: 0.9rem; margin: 5px 0; opacity: 0.7; }
+
+        .section-title {
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--accent-green);
+            display: inline-block;
+            margin-bottom: 12px;
+            margin-top: 20px;
+        }
+
+        /* ตารางเวลาแบบพิมพ์เอง */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            font-family: 'Itim', cursive;
+            font-size: 15px;
+            background: #fafafa;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--accent-green); background: #fff; }
+
+        .todo-list { list-style: none; padding: 0; }
+        .todo-item { display: flex; align-items: center; margin-bottom: 8px; }
+        .todo-item input[type="checkbox"] { margin-right: 10px; accent-color: var(--accent-green); }
+
+        /* ปุ่มกด */
+        .controls { margin-top: 30px; text-align: center; }
+        .btn-save {
+            background-color: var(--accent-green);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Mitr', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(159, 184, 173, 0.4);
+            transition: 0.3s;
+        }
+        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(159, 184, 173, 0.5); }
+
+        .footer-logo { text-align: center; font-size: 0.7rem; color: #ddd; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="planner-box">
+        <div class="header">
+            <h1>Today's Flow ☁️</h1>
+            <p>ค่อยๆ ทำไปทีละอย่างนะ เธอเก่งมากแล้ว</p>
+        </div>
+
+        <div class="section-title">Schedule</div>
+        <div class="schedule-grid">
+            <input type="text" value="07:00" placeholder="เวลา">
+            <input type="text" placeholder="ตื่นนอน / เริ่มวันใหม่">
+            <input type="text" value="09:00" placeholder="เวลา">
+            <input type="text" placeholder="เข้าเรียน / ทำงาน">
+            <input type="text" value="12:00" placeholder="เวลา">
+            <input type="text" placeholder="พักกินข้าวอร่อยๆ">
+            <input type="text" value="19:00" placeholder="เวลา">
+            <input type="text" placeholder="Self-care / พักผ่อน">
+        </div>
+
+        <div class="section-title">Top Priorities</div>
+        <div class="todo-list">
+            <div class="todo-item"><input type="checkbox"> <input type="text" placeholder="งานชิ้นสำคัญที่ 1"></div>
+            <div class="todo-item"><input type="checkbox"> <input type="text" placeholder="งานชิ้นสำคัญที่ 2"></div>
+        </div>
+
+        <div class="section-title">Daily Feel</div>
+        <textarea rows="3" placeholder="วันนี้มีอะไรอยากระบายไหม? เขียนตรงนี้ได้เลยนะ..."></textarea>
+
+        <p style="text-align: right; font-size: 0.8rem; margin-top: 15px; color: var(--accent-green);">
+            #ใจดีกับตัวเองบ้างนะ ✨
+        </p>
+    </div>
+
+    <div class="controls">
+        <button class="btn-save" onclick="saveAsImage()">📸 บันทึกเป็นรูปภาพ</button>
+        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.5;">*รูปจะถูกบันทึกลงในเครื่องของเธอ*</p>
+    </div>
+
+    <div class="footer-logo">Student Zen Planner v1.0</div>
+
+    <script>
+        function saveAsImage() {
+            const planner = document.getElementById('planner-box');
+            
+            // ปรับแต่งเล็กน้อยก่อนเซฟเพื่อความสวยงาม
+            html2canvas(planner, {
+                backgroundColor: "#fdfaf5",
+                scale: 3, // ชัดระดับ HD
+                useCORS: true,
+                borderRadius: 30
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'My-Daily-Flow.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+    </script>
+
+</body>
+</html>
