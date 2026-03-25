@@ -10,7 +10,7 @@
         :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent: #ff6b6b; --soft-blue: #e3f2fd; --genz-dark: #1a1a1a; --neon-pink: #ff2d55; }
         body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
-        /* Planner Card */
+        /* Planner Card - ส่วนที่จะถูกเซฟเป็นรูป */
         .planner-card { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 35px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid #fff0f0; margin-bottom: 20px; }
         h1 { font-family: 'Itim'; color: var(--accent); text-align: center; margin-bottom: 5px; font-size: 30px; }
         .greeting { text-align: center; font-size: 16px; margin-bottom: 20px; color: #777; font-family: 'Itim'; }
@@ -20,7 +20,6 @@
         #video { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { width: 100%; height: 100%; object-fit: cover; display: none; }
         .btn-snap { background: #ffb7c5; color: white; border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer; margin: 10px 0 20px; font-family: 'Itim'; font-size: 18px; transition: 0.3s; }
-        .btn-snap:hover { transform: scale(1.05); background: #ff99aa; }
 
         /* Box Styles */
         .box { background: #fffcfc; padding: 18px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #fff5f5; }
@@ -30,13 +29,12 @@
         .poem-box { font-family: 'Itim'; font-size: 19px; text-align: center; color: #ff6b6b; line-height: 1.6; padding: 15px; border: 2px dashed #ffb7c5; border-radius: 20px; margin-bottom: 15px; background: #fff9f9; }
         .care-tip { background: var(--soft-blue); padding: 12px; border-radius: 15px; font-size: 14px; margin-top: 10px; border-left: 5px solid #90caf9; }
         
-        /* 🔥 New Gen Z Music UI */
-        .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 550px; border-radius: 30px; padding: 20px; box-shadow: 0 15px 45px rgba(0,0,0,0.3); border: 2px solid var(--neon-pink); }
+        /* Music UI - ส่วนนี้จะไม่ถูกเซฟลงในรูป */
+        .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 550px; border-radius: 30px; padding: 20px; box-shadow: 0 15px 45px rgba(0,0,0,0.3); border: 2px solid var(--neon-pink); margin-top: 10px; }
         .player-container { position: relative; width: 100%; height: 150px; border-radius: 20px; overflow: hidden; background: #000; }
-        .music-info { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-        .music-title { font-weight: 700; color: var(--neon-pink); font-size: 16px; letter-spacing: 1px; }
+        .music-title { font-weight: 700; color: var(--neon-pink); font-size: 16px; letter-spacing: 1px; margin-bottom: 15px; text-align: center; }
 
-        .btn-save { width: 100%; max-width: 550px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 50px; font-size: 20px; cursor: pointer; margin-top: 20px; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.3); }
+        .btn-save { width: 100%; max-width: 550px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 50px; font-size: 20px; cursor: pointer; margin: 10px 0 20px; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.3); }
     </style>
 </head>
 <body>
@@ -53,23 +51,23 @@
         <video id="video" autoplay playsinline></video>
         <img id="photo-result">
     </div>
-    <center><button class="btn-snap" onclick="takePhoto()">📸 แชะ! บันทึกความสดใสเช้านี้</button></center>
+    <center><button class="btn-snap" onclick="takePhoto()">📸 ถ่ายรูปเช้านี้</button></center>
 
     <div class="box">
-        <div class="box-title">📊 สุขภาพวันนี้</div>
+        <div class="box-title">📊 สุขภาพ & ฟีลลิ่ง</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div>
                 <label style="font-size: 12px;">คะแนนความง่วง 💤</label>
-                <select id="sleep"><option>10 (อยากนอนต่อมาก)</option><option>5 (ตื่นแบบงงๆ)</option><option>1 (สดชื่นจัด!)</option></select>
+                <select><option>10 (อยากนอนต่อมาก)</option><option>5 (ตื่นแบบงงๆ)</option><option>1 (สดชื่นจัด!)</option></select>
             </div>
             <div>
                 <label style="font-size: 12px;">เลเวลความเครียด 🌈</label>
-                <select id="stress"><option>ผ่อนคลาย Chill</option><option>เครียดนิดๆ</option><option>ตึงมาก!</option></select>
+                <select><option>ผ่อนคลาย Chill</option><option>เครียดนิดๆ</option><option>ตึงมาก!</option></select>
             </div>
         </div>
         <div class="care-tip">🥤 <b>เช้านี้:</b> น้ำอัดลมซ่าๆ หรือนมเย็นๆ สักขวดดีนะ?</div>
         <div class="care-tip" style="background: #e8f5e9; color: #2e7d32; border-left: 5px solid #a5d6a7;">🍱 <b>หิวไหม:</b> ไปโรงประกอบกัน กินแล้วมีความสุขแน่นอน!</div>
-        <div style="color: #2196f3; font-weight: bold; margin-top: 15px; text-align: center;">💧 อย่าลืมดื่มน้ำเยอะๆ และยิ้มกว้างๆ นะ 😊</div>
+        <div style="color: #2196f3; font-weight: bold; margin-top: 15px; text-align: center; font-size: 14px;">💧 อย่าลืมดื่มน้ำเยอะๆ และยิ้มกว้างๆ นะ 😊</div>
     </div>
 
     <div class="box">
@@ -84,22 +82,17 @@
     </div>
 </div>
 
-<button class="btn-save" onclick="saveImage()">📥 บันทึกรูป (แชร์ความสดใส!)</button>
+<button class="btn-save" onclick="saveImage()">📥 บันทึกเฉพาะตารางเรียน (รูปภาพ)</button>
 
 <div class="music-card">
-    <div class="music-info">
-        <div class="music-title">⚡ GEN-Z BOOSTER MIX</div>
-        <div style="font-size: 10px; background: var(--neon-pink); padding: 2px 8px; border-radius: 10px;">LIVE PLAYLIST</div>
-    </div>
+    <div class="music-title">⚡ GEN-Z BOOSTER MIX</div>
     <div class="player-container">
         <iframe width="100%" height="100%" 
             src="https://www.youtube.com/embed/Iu6g6a9KVHA?playlist=Iu6g6a9KVHA,aj6itxnuXHs,0I4Pi-spMFk,aBuK_dMi68c,6vh3K5wqRz4&autoplay=1&loop=1&controls=1" 
             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
         </iframe>
     </div>
-    <div style="font-size: 11px; margin-top: 12px; color: #aaa; text-align: center; font-style: italic;">
-        *แตะที่แถบด้านล่างของวิดีโอเพื่อ "กดถัดไป" หรือเปลี่ยนเพลงซิ่งๆ ได้เลยจ้า!*
-    </div>
+    <div style="font-size: 11px; margin-top: 10px; color: #aaa; text-align: center;">*กด Next ในตัวเครื่องเล่นเพื่อเปลี่ยนเพลงได้เลย*</div>
 </div>
 
 <script>
@@ -126,11 +119,12 @@
         video.style.display = 'none';
     }
 
+    // ฟังก์ชันเซฟรูปเฉพาะส่วนตาราง (id="capture-area")
     function saveImage() {
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 2 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'My-Zen-Morning.png';
+            link.download = 'My-Morning-Planner.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
