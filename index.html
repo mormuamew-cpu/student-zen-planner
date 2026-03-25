@@ -3,78 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zen Daily Planner</title>
+    <title>My Zen Daily Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Mitr:wght@300&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --bg-color: #fdfaf5; --accent-green: #9fb8ad; --soft-pink: #f4dada; --text-main: #5a5a5a; }
-        body { font-family: 'Itim', cursive; background-color: var(--bg-color); display: flex; flex-direction: column; align-items: center; padding: 20px; color: var(--text-main); }
-        .container { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 800px; width: 100%; margin-bottom: 120px; }
-        h1 { color: var(--accent-green); text-align: center; margin-bottom: 5px; }
-        .planner-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-top: 25px; }
-        @media (max-width: 650px) { .planner-grid { grid-template-columns: 1fr; } }
-        .section-title { font-size: 18px; margin-bottom: 15px; color: #8da398; border-bottom: 2px solid var(--soft-pink); display: inline-block; }
-        .time-row { display: flex; align-items: center; margin-bottom: 10px; }
-        .time-label { width: 60px; font-size: 15px; color: #888; }
-        .time-input { flex: 1; border: none; border-bottom: 1px dashed #ddd; padding: 2px; font-family: 'Itim', cursive; font-size: 16px; outline: none; background: transparent; }
-        textarea { width: 100%; height: 350px; border: 2px dashed var(--soft-pink); border-radius: 15px; padding: 15px; font-family: 'Itim', cursive; font-size: 18px; resize: none; outline: none; box-sizing: border-box; background: #fffcfc; }
-        .btn-save { display: block; margin: 30px auto 0; background: var(--accent-green); color: white; border: none; padding: 12px 40px; border-radius: 50px; font-size: 20px; cursor: pointer; transition: 0.3s; }
-        .btn-save:hover { background: #8da398; transform: scale(1.05); }
-        .safe-zone-panel { position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); backdrop-filter: blur(10px); width: 280px; }
+        :root { --bg-color: #fdfaf5; --text-main: #5a5a5a; --accent: #9fb8ad; }
+        body { font-family: 'Itim', cursive; background-color: var(--bg-color); transition: background 0.8s ease; display: flex; justify-content: center; padding: 20px; color: var(--text-main); }
+        .container { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 900px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        h1 { grid-column: span 2; text-align: center; color: var(--accent); margin-bottom: 10px; }
+        .section { background: #fffcfc; padding: 15px; border-radius: 15px; border: 1px solid #eee; }
+        .section-title { font-size: 18px; margin-bottom: 10px; color: var(--accent); border-bottom: 2px solid #f4dada; display: inline-block; }
+        
+        /* Schedule & Tasks */
+        .input-row { display: flex; margin-bottom: 8px; align-items: center; }
+        .time-label { width: 50px; font-size: 14px; color: #888; }
+        input[type="text"] { flex: 1; border: none; border-bottom: 1px dashed #ccc; background: transparent; font-family: 'Itim'; font-size: 16px; outline: none; }
+        
+        /* Scoring & Food */
+        .score-box { margin-bottom: 15px; }
+        select, textarea { width: 100%; border-radius: 10px; border: 1px solid #ddd; padding: 8px; font-family: 'Itim'; outline: none; }
+        textarea { height: 100px; resize: none; }
+        .food-advice { background: #eef7f2; padding: 10px; border-radius: 10px; font-size: 14px; margin-top: 10px; border-left: 4px solid #9fb8ad; }
+
+        /* Music Player */
+        .music-panel { grid-column: span 2; background: #f9f9f9; padding: 15px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; }
+        audio { height: 30px; }
+
+        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } h1, .music-panel { grid-column: span 1; } }
     </style>
 </head>
 <body>
 
-<div class="container" id="planner-box">
-    <h1>✿ Zen Daily Planner ✿</h1>
-    <p style="text-align:center;">บันทึกเวลาและหัวใจในที่ปลอดภัยของคุณ</p>
-    
-    <div class="planner-grid">
-        <div class="schedule-list">
-            <div class="section-title">⏰ ตารางเวลาของฉัน</div>
-            <div class="time-row"><span class="time-label">07:00</span><input type="text" class="time-input" placeholder="ตื่นนอน..."></div>
-            <div class="time-row"><span class="time-label">09:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">11:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">13:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">15:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">17:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">19:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">21:00</span><input type="text" class="time-input" placeholder="พักผ่อน..."></div>
-        </div>
-        <div>
-            <div class="section-title">☁️ บันทึกความในใจ</div>
-            <textarea placeholder="วันนี้รู้สึกยังไงบ้าง..."></textarea>
-        </div>
-    </div>
-    <button class="btn-save" onclick="saveAsImage()">📸 บันทึกเป็นรูปภาพ</button>
-</div>
+<div class="container">
+    <h1>✿ Happy Morning Planner ✿</h1>
 
-<div class="safe-zone-panel">
-    <div id="quote-box" style="background:#fff5f7; padding:12px; border-radius:15px; margin-bottom:12px; border-left:5px solid #ffb7c5;">
-        <p id="quote-text" style="margin:0; font-size:14px;">"วันนี้คุณเก่งมากแล้วนะ"</p>
-        <button onclick="randomQuote()" style="margin-top:8px; background:#ffb7c5; color:white; border:none; padding:4px 10px; border-radius:10px; font-size:11px; cursor:pointer;">✨ ขอคำฮีลใจ</button>
+    <div class="section">
+        <div class="section-title">⏰ ตารางเวลา & Tasks</div>
+        <div class="input-row"><span class="time-label">07:00</span><input type="text" placeholder="ตื่นนอน / ทำสมาธิ"></div>
+        <div class="input-row"><span class="time-label">08:00</span><input type="text" placeholder="อาหารเช้า"></div>
+        <div class="input-row"><span class="time-label">09:00</span><input type="text" placeholder="เริ่มงาน/เรียน"></div>
+        <div style="margin-top:15px;"><div class="section-title">✅ List งานวันนี้</div>
+            <div class="input-row">☁️ <input type="text" placeholder="สิ่งที่ต้องทำ 1..."></div>
+            <div class="input-row">☁️ <input type="text" placeholder="สิ่งที่ต้องทำ 2..."></div>
+        </div>
     </div>
-    <select id="musicSelect" onchange="changeMusic()" style="width:100%; padding:5px; border-radius:8px; margin-bottom:10px; font-family:'Itim';">
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎵 Lofi สบายๆ</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🎹 เปียโนนุ่มนวล</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">🌊 เสียงคลื่นทะเล</option>
-    </select>
-    <audio id="myAudio" controls loop style="height:30px; width:100%;"><source id="audioSource" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+
+    <div class="section">
+        <div class="section-title">📊 สุขภาพเช้านี้</div>
+        <div class="score-box">
+            <label>คะแนนการตื่นนอน (1-10): </label>
+            <select id="wakeScore"><option>8</option><option>9</option><option>10</option><option>7</option></select>
+        </div>
+        <div class="score-box">
+            <label>ระดับความเครียด: </label>
+            <select id="stressLevel"><option>ต่ำ (ผ่อนคลาย)</option><option>กลาง</option><option>สูง</option></select>
+        </div>
+        
+        <div class="food-advice" id="foodTip">
+            <b>💡 แนะนำอาหารเช้า:</b> กราโนล่าโยเกิร์ตพร้อมผลไม้ตระกูลเบอร์รี่ ช่วยบำรุงสมองและสดชื่นครับ!
+        </div>
+
+        <div style="margin-top:15px;" class="section-title">✍️ บันทึกความในใจ</div>
+        <textarea placeholder="ระบายความรู้สึกตรงนี้ได้เลย..."></textarea>
+    </div>
+
+    <div class="music-panel">
+        <div>
+            <label>เลือกบรรยากาศ: </label>
+            <select id="moodSelect" onchange="changeMood()">
+                <option value="#fdfaf5" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🌿 ผ่อนคลาย (สีครีม)</option>
+                <option value="#e3f2fd" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">🌊 เงียบสงบ (สีฟ้า)</option>
+                <option value="#fce4ec" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🌸 สดใส (สีชมพู)</option>
+            </select>
+        </div>
+        <audio id="player" controls loop>
+            <source id="audioSrc" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
 </div>
 
 <script>
-    function saveAsImage() {
-        const element = document.getElementById("planner-box");
-        html2canvas(element).then(canvas => {
-            const link = document.createElement("a");
-            link.download = "my-zen-planner.png";
-            link.href = canvas.toDataURL();
-            link.click();
-        });
+    function changeMood() {
+        const select = document.getElementById('moodSelect');
+        const color = select.value;
+        const audioSrc = select.options[select.selectedIndex].getAttribute('data-src');
+        const player = document.getElementById('player');
+        const audioSource = document.getElementById('audioSrc');
+
+        // เปลี่ยนสีพื้นหลังตามเพลง
+        document.body.style.background = color;
+
+        // เปลี่ยนเพลง
+        audioSource.src = audioSrc;
+        player.load();
+        player.play();
+
+        // เปลี่ยนคำแนะนำอาหารแบบสุ่ม
+        const foods = [
+            "🍳 ไข่ต้มและขนมปังโฮลวีท เพื่อพลังงานที่คงที่",
+            "🥣 ข้าวต้มปลาร้อนๆ ย่อยง่ายสบายท้อง",
+            "🥑 อะโวคาโดทาสต์ ช่วยเรื่องสมาธิในการทำงาน",
+            "🍌 กล้วยหอมและนมอัลมอนด์ ลดความเครียดได้ดี"
+        ];
+        document.getElementById('foodTip').innerHTML = "<b>💡 แนะนำอาหารเช้า:</b> " + foods[Math.floor(Math.random() * foods.length)];
     }
-    const quotes = ["เธอเก่งที่สุดเลย", "เหนื่อยก็พักนะ", "วันนี้ทำดีมากแล้ว", "ยิ้มเยอะๆ นะ"];
-    function randomQuote() { document.getElementById('quote-text').innerText = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"'; }
-    function changeMusic() { var audio = document.getElementById('myAudio'); document.getElementById('audioSource').src = document.getElementById('musicSelect').value; audio.load(); audio.play(); }
 </script>
+
 </body>
 </html>
