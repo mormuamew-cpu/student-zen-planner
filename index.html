@@ -93,6 +93,54 @@
         .footer-logo { text-align: center; font-size: 0.7rem; color: #ddd; margin-top: 30px; }
     </style>
 </head>
+    <div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); backdrop-filter: blur(10px); width: 280px; font-family: 'Kanit', sans-serif;">
+    
+    <div id="quote-box" style="background: #fff5f7; padding: 12px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid #ffb7c5;">
+        <p id="quote-text" style="margin: 0; font-size: 14px; color: #5a5a5a; line-height: 1.5;">"วันนี้คุณเก่งมากแล้วนะ พักผ่อนบ้างนะคนดี"</p>
+        <button onclick="randomQuote()" style="margin-top: 8px; background: #ffb7c5; color: white; border: none; padding: 4px 10px; border-radius: 10px; font-size: 11px; cursor: pointer; transition: 0.3s;">✨ ขอคำให้กำลังใจหน่อย</button>
+    </div>
+
+    <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px; color: #5a5a5a;">🎧 เลือกบรรยากาศที่คุณชอบ:</div>
+    
+    <select id="musicSelect" onchange="changeMusic()" style="width: 100%; padding: 8px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 10px; cursor: pointer; font-size: 13px;">
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎵 Lofi สบายๆ (ทำงาน)</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🎹 เปียโนนุ่มนวล (พักผ่อน)</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">🌊 เสียงคลื่นทะเล (บำบัด)</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">🍃 เสียงนกในป่า (สดชื่น)</option>
+    </select>
+
+    <audio id="myAudio" controls loop style="height: 30px; width: 100%;">
+        <source id="audioSource" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const quotes = [
+            "วันนี้เธอทำเต็มที่แล้วนะ ภูมิใจในตัวเธอจัง",
+            "เหนื่อยก็พักนะ พรุ่งนี้ค่อยเริ่มใหม่ก็ได้ ไม่สายไปหรอก",
+            "เก่งมากที่ผ่านวันนี้มาได้ เธอสุดยอดที่สุดเลย!",
+            "อย่าลืมใจดีกับตัวเองให้เหมือนที่ใจดีกับคนอื่นนะ",
+            "ความสุขเล็กๆ ระหว่างวัน ก็คือความสำเร็จอย่างหนึ่งนะ",
+            "พักหายใจลึกๆ สักนิด แล้วค่อยๆ เดินต่อเนาะ",
+            "โลกนี้โชคดีจังที่มีเธออยู่ ยิ้มเยอะๆ นะ"
+        ];
+
+        function randomQuote() {
+            const textElement = document.getElementById('quote-text');
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            textElement.innerText = '"' + quotes[randomIndex] + '"';
+        }
+
+        function changeMusic() {
+            var audio = document.getElementById('myAudio');
+            var source = document.getElementById('audioSource');
+            var select = document.getElementById('musicSelect');
+            source.src = select.value;
+            audio.load();
+            audio.play();
+        }
+    </script>
+</div>
+
 <body>
 
     <div id="planner-box">
