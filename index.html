@@ -3,149 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Student Zen Planner</title>
+    <title>Zen Daily Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Mitr:wght@300&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root {
-            --bg-color: #fdfaf5;
-            --accent-green: #9fb8ad;
-            --soft-pink: #f4dada;
-            --text-main: #5a5a5a;
-        }
-        body {
-            font-family: 'Itim', cursive;
-            background-color: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: var(--text-main);
-            min-height: 100vh;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            max-width: 800px;
-            width: 100%;
-            margin-bottom: 120px;
-        }
-        h1 { color: var(--accent-green); margin-bottom: 10px; font-size: 32px; text-align: center; }
-        .planner-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        @media (max-width: 600px) {
-            .planner-grid { grid-template-columns: 1fr; }
-        }
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #8da398;
-            border-bottom: 2px solid var(--soft-pink);
-            display: inline-block;
-        }
-        /* ตารางเวลา */
-        .schedule-list { text-align: left; }
-        .time-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .time-label { width: 60px; font-size: 14px; color: #999; }
-        .time-input {
-            flex: 1;
-            border: none;
-            border-bottom: 1px dashed #ddd;
-            padding: 2px 5px;
-            font-family: 'Itim', cursive;
-            font-size: 16px;
-            outline: none;
-        }
-        /* ช่องบันทึกความรู้สึก */
-        textarea {
-            width: 100%;
-            height: 300px;
-            border: 2px dashed var(--soft-pink);
-            border-radius: 15px;
-            padding: 15px;
-            font-family: 'Itim', cursive;
-            font-size: 18px;
-            resize: none;
-            outline: none;
-            box-sizing: border-box;
-            background-color: #fffcfc;
-        }
-        .btn-save {
-            margin-top: 25px;
-            background-color: var(--accent-green);
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 50px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .btn-save:hover { background-color: #8da398; transform: scale(1.05); }
-        
-        /* แถบดนตรีและคำคม */
-        .safe-zone-panel {
-            position: fixed; bottom: 20px; left: 20px; z-index: 1000;
-            background: rgba(255,255,255,0.95); padding: 15px; border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
-            width: 280px; text-align: left;
-        }
+        :root { --bg-color: #fdfaf5; --accent-green: #9fb8ad; --soft-pink: #f4dada; --text-main: #5a5a5a; }
+        body { font-family: 'Itim', cursive; background-color: var(--bg-color); display: flex; flex-direction: column; align-items: center; padding: 20px; color: var(--text-main); }
+        .container { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 800px; width: 100%; margin-bottom: 120px; }
+        h1 { color: var(--accent-green); text-align: center; margin-bottom: 5px; }
+        .planner-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-top: 25px; }
+        @media (max-width: 650px) { .planner-grid { grid-template-columns: 1fr; } }
+        .section-title { font-size: 18px; margin-bottom: 15px; color: #8da398; border-bottom: 2px solid var(--soft-pink); display: inline-block; }
+        .time-row { display: flex; align-items: center; margin-bottom: 10px; }
+        .time-label { width: 60px; font-size: 15px; color: #888; }
+        .time-input { flex: 1; border: none; border-bottom: 1px dashed #ddd; padding: 2px; font-family: 'Itim', cursive; font-size: 16px; outline: none; background: transparent; }
+        textarea { width: 100%; height: 350px; border: 2px dashed var(--soft-pink); border-radius: 15px; padding: 15px; font-family: 'Itim', cursive; font-size: 18px; resize: none; outline: none; box-sizing: border-box; background: #fffcfc; }
+        .btn-save { display: block; margin: 30px auto 0; background: var(--accent-green); color: white; border: none; padding: 12px 40px; border-radius: 50px; font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-save:hover { background: #8da398; transform: scale(1.05); }
+        .safe-zone-panel { position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); backdrop-filter: blur(10px); width: 280px; }
     </style>
 </head>
 <body>
 
 <div class="container" id="planner-box">
     <h1>✿ Zen Daily Planner ✿</h1>
-    <p style="text-align:center;">วางแผนวันดีๆ และบันทึกใจให้มีความสุข</p>
+    <p style="text-align:center;">บันทึกเวลาและหัวใจในที่ปลอดภัยของคุณ</p>
     
     <div class="planner-grid">
         <div class="schedule-list">
             <div class="section-title">⏰ ตารางเวลาของฉัน</div>
-            <div class="time-row"><span class="time-label">07:00</span><input type="text" class="time-input" placeholder="..."></div>
+            <div class="time-row"><span class="time-label">07:00</span><input type="text" class="time-input" placeholder="ตื่นนอน..."></div>
             <div class="time-row"><span class="time-label">09:00</span><input type="text" class="time-input" placeholder="..."></div>
             <div class="time-row"><span class="time-label">11:00</span><input type="text" class="time-input" placeholder="..."></div>
             <div class="time-row"><span class="time-label">13:00</span><input type="text" class="time-input" placeholder="..."></div>
             <div class="time-row"><span class="time-label">15:00</span><input type="text" class="time-input" placeholder="..."></div>
             <div class="time-row"><span class="time-label">17:00</span><input type="text" class="time-input" placeholder="..."></div>
             <div class="time-row"><span class="time-label">19:00</span><input type="text" class="time-input" placeholder="..."></div>
-            <div class="time-row"><span class="time-label">21:00</span><input type="text" class="time-input" placeholder="..."></div>
+            <div class="time-row"><span class="time-label">21:00</span><input type="text" class="time-input" placeholder="พักผ่อน..."></div>
         </div>
-
         <div>
             <div class="section-title">☁️ บันทึกความในใจ</div>
-            <textarea placeholder="วันนี้รู้สึกยังไง... มีเรื่องอะไรอยากเล่าไหม?"></textarea>
+            <textarea placeholder="วันนี้รู้สึกยังไงบ้าง..."></textarea>
         </div>
     </div>
-    
     <button class="btn-save" onclick="saveAsImage()">📸 บันทึกเป็นรูปภาพ</button>
 </div>
 
 <div class="safe-zone-panel">
-    <div id="quote-box" style="background: #fff5f7; padding: 12px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid #ffb7c5;">
-        <p id="quote-text" style="margin: 0; font-size: 14px;">"วันนี้คุณเก่งมากแล้วนะ พักผ่อนบ้างนะคนดี"</p>
-        <button onclick="randomQuote()" style="margin-top: 8px; background: #ffb7c5; color: white; border: none; padding: 4px 10px; border-radius: 10px; font-size: 11px; cursor: pointer;">✨ ขอคำให้กำลังใจ</button>
+    <div id="quote-box" style="background:#fff5f7; padding:12px; border-radius:15px; margin-bottom:12px; border-left:5px solid #ffb7c5;">
+        <p id="quote-text" style="margin:0; font-size:14px;">"วันนี้คุณเก่งมากแล้วนะ"</p>
+        <button onclick="randomQuote()" style="margin-top:8px; background:#ffb7c5; color:white; border:none; padding:4px 10px; border-radius:10px; font-size:11px; cursor:pointer;">✨ ขอคำฮีลใจ</button>
     </div>
-    <select id="musicSelect" onchange="changeMusic()" style="width:100%; padding:5px; border-radius:8px; margin-bottom:10px;">
+    <select id="musicSelect" onchange="changeMusic()" style="width:100%; padding:5px; border-radius:8px; margin-bottom:10px; font-family:'Itim';">
         <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🎵 Lofi สบายๆ</option>
         <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🎹 เปียโนนุ่มนวล</option>
         <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3">🌊 เสียงคลื่นทะเล</option>
-    </audio>
-    <audio id="myAudio" controls loop style="height: 30px; width: 100%;">
-        <source id="audioSource" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
+    </select>
+    <audio id="myAudio" controls loop style="height:30px; width:100%;"><source id="audioSource" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
 </div>
 
 <script>
@@ -153,23 +67,14 @@
         const element = document.getElementById("planner-box");
         html2canvas(element).then(canvas => {
             const link = document.createElement("a");
-            link.download = "my-daily-zen.png";
+            link.download = "my-zen-planner.png";
             link.href = canvas.toDataURL();
             link.click();
         });
     }
-
-    const quotes = ["เธอเก่งที่สุดเลย", "เหนื่อยก็พักนะ", "วันนี้ทำดีมากแล้ว", "ยิ้มเยอะๆ นะ", "ใจดีกับตัวเองบ้างนะ"];
-    function randomQuote() {
-        document.getElementById('quote-text').innerText = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"';
-    }
-
-    function changeMusic() {
-        var audio = document.getElementById('myAudio');
-        document.getElementById('audioSource').src = document.getElementById('musicSelect').value;
-        audio.load(); audio.play();
-    }
+    const quotes = ["เธอเก่งที่สุดเลย", "เหนื่อยก็พักนะ", "วันนี้ทำดีมากแล้ว", "ยิ้มเยอะๆ นะ"];
+    function randomQuote() { document.getElementById('quote-text').innerText = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"'; }
+    function changeMusic() { var audio = document.getElementById('myAudio'); document.getElementById('audioSource').src = document.getElementById('musicSelect').value; audio.load(); audio.play(); }
 </script>
-
 </body>
 </html>
