@@ -7,11 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --main-bg: #fdfaf5; --accent: #ff6b6b; --printer-pink: #ffb7c5; --rose-gold: #b5838d; }
-        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        
+        :root { --main-bg: #fdfaf5; --accent: #ff6b6b; --printer-pink: #ffb7c5; --rose-gold: #b5838d; --neon-pink: #ff2d55; }
+        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; min-height: 100vh; }
+
+        /* หน้าจอก่อนเข้า (เพื่อปลดล็อกเพลง) */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--printer-pink); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
+        .start-btn { padding: 20px 40px; font-size: 24px; font-family: 'Itim'; background: white; color: var(--accent); border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 0 #ff8fa3; transition: 0.2s; }
+        .start-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 #ff8fa3; }
+
         /* แผ่นแพลนเนอร์ */
-        .planner-paper { background: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid var(--rose-gold); position: relative; overflow: hidden; }
+        .planner-paper { background: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid var(--rose-gold); position: relative; overflow: hidden; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
         h1 { font-family: 'Itim'; color: var(--accent); text-align: center; font-size: 26px; margin: 0 0 15px; }
 
         /* ส่วนกล้องและกลอน */
@@ -21,30 +26,33 @@
         #photo-result { display: none; position: absolute; top:0; left:0; }
         .poem { flex: 1; font-family: 'Itim'; font-size: 15px; color: #6d6875; text-align: center; background: #fff9f9; padding: 10px; border-radius: 15px; border: 1px dashed var(--printer-pink); }
 
-        /* กล่องเนื้อหา */
-        .box { background: #fffcfc; padding: 12px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
-        .box-title { font-weight: 700; color: var(--accent); font-size: 15px; margin-bottom: 8px; }
+        /* 🖨️ ปุ่มเครื่องปริ้นสุดคิวท์ */
+        .print-btn-wrap { margin: 25px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .printer-icon { width: 90px; height: 55px; background: var(--printer-pink); border-radius: 10px 10px 5px 5px; position: relative; box-shadow: 0 6px 0 #e8a2af; }
+        .printer-icon::before { content: ''; position: absolute; top: -15px; left: 15px; width: 60px; height: 18px; background: #ffe4e8; border-radius: 5px 5px 0 0; }
+        .printer-icon::after { content: ''; position: absolute; top: 18px; left: 20px; width: 50px; height: 6px; background: #ff8fa3; border-radius: 10px; }
+        .print-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 15px; font-size: 16px; }
+        .print-btn-wrap:hover { transform: translateY(-5px) scale(1.05); }
+
+        .box { background: rgba(255,255,255,0.7); padding: 12px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
         input { width: 100%; border: none; border-bottom: 1px dashed #ddd; padding: 5px; font-family: 'Kanit'; font-size: 14px; outline: none; background: transparent; }
 
-        /* 🖨️ ปุ่มเครื่องปริ้นสุดคิวท์ */
-        .print-btn-wrap { margin: 20px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
-        .printer-icon { width: 80px; height: 50px; background: var(--printer-pink); border-radius: 10px 10px 5px 5px; position: relative; box-shadow: 0 5px 0 #e8a2af; }
-        .printer-icon::before { content: ''; position: absolute; top: -12px; left: 12px; width: 56px; height: 15px; background: #ffe4e8; border-radius: 5px 5px 0 0; }
-        .printer-icon::after { content: ''; position: absolute; top: 15px; left: 15px; width: 50px; height: 6px; background: #ff8fa3; border-radius: 10px; }
-        .print-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 10px; }
-        .print-btn-wrap:hover { transform: scale(1.1); }
-
         /* เพลง */
-        .music-box { width: 100%; max-width: 450px; border-radius: 20px; overflow: hidden; border: 2px solid #333; margin-top: 15px; }
+        .music-card { background: #2b2d42; color: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 15px; border: 2px solid var(--neon-pink); margin-top: 20px; }
     </style>
 </head>
 <body>
 
+<div id="overlay">
+    <h2 style="font-family:'Itim'; color:white; margin-bottom:20px;">พร้อมลุยเช้านี้หรือยัง? ✨</h2>
+    <button class="start-btn" onclick="startApp()">กดเพื่อเริ่มซิ่ง! 🎵</button>
+</div>
+
 <div class="planner-paper" id="capture-area">
-    <h1>✨ My Morning Vibe</h1>
+    <h1>🎀 Personal Morning Planner</h1>
     
     <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-family: 'Itim'; color: #888;">
-        <input type="text" placeholder="🧸 เจ้าของแพลนเนอร์..." style="width: 60%;">
+        <input type="text" placeholder="🧸 แพลนเนอร์ของ..." style="width: 60%;">
         <span id="display-date">วันที่...</span>
     </div>
 
@@ -56,37 +64,58 @@
         </div>
         <div class="poem">
             "ยิ้มให้ตัวเองเยอะๆ นะคนเก่ง<br>วันนี้ต้องเป็นวันที่ดีแน่นอน<br>สู้ๆ ฉันเป็นกำลังใจให้!"
-            <button onclick="takeSnap()" style="margin-top:8px; border:none; background:var(--printer-pink); color:white; border-radius:50px; padding:4px 12px; font-family:'Itim'; cursor:pointer;">📸 แชะ!</button>
+            <button onclick="takeSnap()" style="margin-top:8px; border:none; background:var(--printer-pink); color:white; border-radius:50px; padding:6px 15px; font-family:'Itim'; cursor:pointer;">📸 แชะ!</button>
         </div>
     </div>
 
-    <div class="box">
-        <div class="box-title">💖 ลิสต์สำคัญ (ห้ามลืม!)</div>
-        <input type="text" placeholder="✨ ภารกิจวันนี้...">
-        <input type="text" placeholder="✨ ห้ามลืมเด็ดขาด...">
+    <div class="box" style="background: #fff0f0;">
+        <div style="font-weight:bold; color:var(--accent); margin-bottom:8px;">💖 สำคัญมาก (ห้ามลืม!)</div>
+        <input type="text" placeholder="✨ ภารกิจสุดปัง...">
     </div>
 
     <div class="box">
-        <div class="box-title">⏰ Schedule</div>
+        <div style="font-weight:bold; color:var(--accent); margin-bottom:8px;">⏰ ตารางเวลา</div>
         <div style="display:flex; gap:10px; margin-bottom:5px;"><b>08:00</b> <input type="text" placeholder="..."></div>
         <div style="display:flex; gap:10px;"><b>12:00</b> <input type="text" placeholder="..."></div>
+    </div>
+    
+    <div style="text-align:center; font-size:12px; color:var(--accent); font-family:'Itim'; margin-top:10px;">
+        🥤 ดื่มอะไรอร่อยๆ แล้วลุยกันนะ!
     </div>
 </div>
 
 <div class="print-btn-wrap" onclick="doPrint()">
     <div class="printer-icon"></div>
-    <div class="print-text">ปริ้นท์ลงกระดาษจ้า</div>
+    <div class="print-text">ปริ้นท์รูปเลยจ้า ✨</div>
 </div>
 
-<div class="music-box">
-    <iframe width="100%" height="120" src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+<div class="music-card">
+    <div style="text-align:center; color:var(--neon-pink); font-family:'Itim'; margin-bottom:10px;">🎵 GEN-Z MIX (กำลังซิ่ง...)</div>
+    <div id="player-container" style="height:120px; border-radius:15px; overflow:hidden;">
+        </div>
 </div>
 
 <script>
     // ตั้งค่าวันที่
     document.getElementById('display-date').innerText = new Date().toLocaleDateString('th-TH');
 
-    // เปิดกล้อง
+    function startApp() {
+        // ซ่อนหน้าจอ Overlay
+        document.getElementById('overlay').style.opacity = '0';
+        setTimeout(() => { document.getElementById('overlay').style.display = 'none'; }, 500);
+
+        // โหลดเพลงและ Auto-play
+        document.getElementById('player-container').innerHTML = `
+            <iframe width="100%" height="100%" 
+                src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1" 
+                frameborder="0" allow="autoplay; encrypted-media">
+            </iframe>
+        `;
+        
+        // เริ่มระบบกล้อง
+        initCamera();
+    }
+
     const video = document.getElementById('video');
     const photoImg = document.getElementById('photo-result');
     
@@ -95,10 +124,9 @@
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
         } catch (err) {
-            alert("กรุณากด 'อนุญาต' ให้ใช้กล้องนะครับ ไม่งั้นจะถ่ายรูปไม่ได้");
+            console.log("กล้องขัดข้อง หรือไม่ได้อนุญาต");
         }
     }
-    initCamera();
 
     function takeSnap() {
         const canvas = document.getElementById('hidden-canvas');
@@ -112,8 +140,15 @@
     function doPrint() {
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
+            // เพิ่ม Texture กระดาษแบบจางๆ
+            const ctx = canvas.getContext('2d');
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.globalAlpha = 0.2;
+            ctx.fillStyle = "#f4ece1"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             const link = document.createElement('a');
-            link.download = 'My-Daily-Planner.png';
+            link.download = 'My-Zen-Morning.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
