@@ -3,53 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate GRWM Full Day Planner</title>
+    <title>Editable GRWM Full Day</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --soft-cream: #f9f6f2; --aesthetic-brown: #a89078; --misty-rose: #eac8c1; --text-dark: #4a443f; --glass: rgba(255, 255, 255, 0.7); }
-        body { font-family: 'Kanit', sans-serif; background: var(--soft-cream); color: var(--text-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
+        :root { --cream: #fdfaf5; --brown: #a89078; --pink: #fbc4ab; --dark: #4a443f; }
+        body { font-family: 'Kanit', sans-serif; background: var(--cream); color: var(--dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
 
-        /* 🎀 Start Overlay */
-        #overlay { position: fixed; inset: 0; background: #fff; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.8s; }
-        .start-btn { padding: 18px 60px; font-size: 22px; font-family: 'Itim'; background: var(--aesthetic-brown); color: white; border: none; border-radius: 100px; cursor: pointer; box-shadow: 0 10px 20px rgba(168, 144, 120, 0.2); }
+        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
+        .start-btn { padding: 18px 50px; font-size: 22px; font-family: 'Itim'; background: var(--brown); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(168, 144, 120, 0.2); }
 
-        /* 📜 Large Planner Paper */
-        .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.03); border: 1px solid rgba(168,144,120,0.1); position: relative; background-image: radial-gradient(#d1d1d1 0.5px, transparent 0.5px); background-size: 24px 24px; }
-        h1 { font-family: 'Itim'; color: var(--aesthetic-brown); text-align: center; font-size: 30px; margin-bottom: 25px; }
+        .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; }
+        h1 { font-family: 'Itim'; color: var(--brown); text-align: center; font-size: 30px; margin-bottom: 20px; }
 
-        /* 📸 Snapshot Area */
-        .snap-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
-        #camera-box { width: 100%; height: 220px; background: #fafafa; border-radius: 30px; overflow: hidden; border: 1.5px solid var(--misty-rose); position: relative; }
-        #video, #photo-result { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.05) contrast(1.02); }
+        .snap-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        #camera-box { width: 100%; height: 200px; background: #f9f9f9; border-radius: 30px; overflow: hidden; border: 2px solid var(--pink); position: relative; }
+        #video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { display: none; position: absolute; top:0; left:0; }
-        .snap-btn { align-self: center; border: none; background: var(--misty-rose); color: #7a5c56; border-radius: 50px; padding: 8px 25px; font-family: 'Itim'; cursor: pointer; font-size: 14px; }
+        .snap-btn { align-self: center; border: none; background: var(--pink); color: #7a5c56; border-radius: 50px; padding: 10px 25px; font-family: 'Itim'; cursor: pointer; }
 
-        /* ⏰ Extensive Timeline (10+ Rows) */
-        .timeline-container { background: var(--glass); padding: 20px; border-radius: 30px; border: 1px solid #f0f0f0; margin-bottom: 25px; }
-        .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,0.03); }
-        .time-row:last-child { border-bottom: none; }
-        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 5px 10px; border-radius: 10px; font-family: 'Kanit'; font-size: 13px; color: var(--aesthetic-brown); font-weight: bold; width: 85px; cursor: pointer; }
-        .time-row input[type="text"] { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #555; font-family: 'Kanit'; }
+        .timeline { background: #fffcf9; padding: 20px; border-radius: 30px; border: 1px solid #f0f0f0; margin-bottom: 20px; }
+        .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 8px; }
+        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 6px; border-radius: 10px; font-family: 'Kanit'; font-size: 14px; color: var(--brown); font-weight: bold; width: 90px; cursor: pointer; }
+        .time-row input[type="text"] { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #555; }
+        .time-row input[type="text"]:focus { border-bottom: 1px solid var(--pink); }
 
-        /* 🎵 Mood Player */
-        .player-wrap { display: flex; gap: 15px; margin: 20px 0; background: white; padding: 12px 25px; border-radius: 100px; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
-        .mood-btn { border: none; background: none; font-size: 22px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
-        .mood-btn.active { filter: grayscale(0) scale(1.2); }
-
-        .save-btn { background: var(--aesthetic-brown); color: white; border: none; padding: 20px 60px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; transition: 0.3s; margin-bottom: 30px; }
+        .save-btn { background: var(--brown); color: white; border: none; padding: 18px 50px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <div style="font-size: 50px; margin-bottom: 20px;">🎧</div>
-    <h2 style="font-family:'Itim'; color:var(--aesthetic-brown); margin-bottom:30px;">Get Ready With Me: Full Day</h2>
-    <button class="start-btn sfx-soft" onclick="startApp()">Enter My Space</button>
+    <h2 style="font-family:'Itim'; color:var(--brown); margin-bottom:20px;">Get Ready With Me ✨</h2>
+    <button class="start-btn" onclick="startApp()">Enter & Edit Plan</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
-    <h1>Daily Routine</h1>
+    <h1>My Full Day Plan</h1>
     
     <div class="snap-section">
         <div id="camera-box">
@@ -57,129 +47,81 @@
             <canvas id="hidden-canvas" style="display:none;"></canvas>
             <img id="photo-result">
         </div>
-        <button onclick="takeSnap()" class="snap-btn sfx-camera">📸 Take a Snap</button>
+        <button onclick="takeSnap()" class="snap-btn">📸 Take a Snap</button>
     </div>
 
-    <div class="timeline-container">
-        <div style="font-weight:700; color:var(--aesthetic-brown); margin-bottom:15px; font-size:15px;">⏰ Full Day Journey (แก้ไขเวลาได้)</div>
-        
-        <div class="time-row">
-            <input type="time" value="06:00" class="sfx-soft">
-            <input type="text" value="Wake up & Refresh ☁️" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="06:30" class="sfx-soft">
-            <input type="text" value="Skincare & Morning Prep 🧴" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="07:30" class="sfx-soft">
-            <input type="text" value="Ovaltine & Healthy Breakfast 🥤" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="09:00" class="sfx-soft">
-            <input type="text" placeholder="Deep Work / Class Session 1" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="12:00" class="sfx-soft">
-            <input type="text" value="Mindful Lunch 🍱" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="13:30" class="sfx-soft">
-            <input type="text" placeholder="Session 2 / Productivity" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="16:00" class="sfx-soft">
-            <input type="text" placeholder="Break & Snack Time 🍎" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="18:00" class="sfx-soft">
-            <input type="text" value="Workout or Sunset Walk 🏃‍♀️" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="19:30" class="sfx-soft">
-            <input type="text" value="Dinner & Relax with Family" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="21:30" class="sfx-soft">
-            <input type="text" value="Night Routine & Reading 📖" class="sfx-asmr">
-        </div>
-        <div class="time-row">
-            <input type="time" value="23:00" class="sfx-soft">
-            <input type="text" value="Off to Sleep... Good Night 😴" class="sfx-asmr">
-        </div>
+    <div class="timeline">
+        <div style="font-weight:700; color:var(--brown); margin-bottom:15px; font-size:15px;">จิ้มที่ "เวลา" หรือ "ข้อความ" เพื่อแก้ไขได้เลย:</div>
+        <div id="rows-container">
+            </div>
     </div>
-
-    <div style="text-align: center; opacity: 0.5; font-size: 12px; letter-spacing: 2px;">
-        EST. 2026 • GRWM VIBES
-    </div>
+    
+    <div style="text-align: center; font-family:'Itim'; opacity: 0.5; font-size: 13px;">"Make every minute count"</div>
 </div>
 
-<div class="player-wrap">
-    <button class="mood-btn sfx-soft active" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', this)">📻</button>
-    <button class="mood-btn sfx-soft" onclick="playMusic('https://actions.google.com/sounds/v1/water/rain_on_roof.ogg', this)">🌧️</button>
-    <button class="mood-btn sfx-soft" onclick="playMusic('https://actions.google.com/sounds/v1/nature_and_animals/birds_singing.ogg', this)">🍃</button>
-    <button class="mood-btn sfx-soft" onclick="toggleMute()">🔇</button>
-</div>
+<button class="save-btn" onclick="doPrint()">Save This Vibe ✨</button>
 
-<button class="save-btn sfx-save" onclick="doPrint()">Save Full Day Vibe ✨</button>
-
-<audio id="bg-music" loop></audio>
-<audio id="soft-click" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio> 
-<audio id="asmr-type" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio> 
-<audio id="camera-sfx" src="https://assets.mixkit.co/active_storage/sfx/544/544-preview.mp3"></audio>
-<audio id="save-sfx" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3"></audio>
+<audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
 
 <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const bgMusic = document.getElementById('bg-music');
-    const softClick = document.getElementById('soft-click');
-    const asmrType = document.getElementById('asmr-type');
-    const cameraSfx = document.getElementById('camera-sfx');
-    const saveSfx = document.getElementById('save-sfx');
+
+    function playSynthSound(freq, type, duration, vol) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
+
+    const schedules = [
+        { t: "06:00", d: "Wake up & Skincare 🧴" },
+        { t: "07:30", d: "Ovaltine & Breakfast 🥤" },
+        { t: "09:00", d: "Start Studying / Work" },
+        { t: "12:00", d: "Lunch Break 🍱" },
+        { t: "15:00", d: "Afternoon Snack 🍎" },
+        { t: "18:00", d: "Exercise / Relax Walk" },
+        { t: "20:00", d: "Dinner Time" },
+        { t: "22:00", d: "Night Routine 📖" }
+    ];
+
+    const container = document.getElementById('rows-container');
+    schedules.forEach(item => {
+        container.innerHTML += `
+            <div class="time-row">
+                <input type="time" value="${item.t}" onchange="playSynthSound(500, 'sine', 0.1, 0.05)">
+                <input type="text" value="${item.d}" oninput="playSynthSound(150, 'triangle', 0.02, 0.03)" placeholder="พิมพ์กิจกรรมที่นี่...">
+            </div>
+        `;
+    });
 
     function startApp() {
+        audioCtx.resume();
         document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => document.getElementById('overlay').style.display = 'none', 800);
-        initCamera();
-        playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', document.querySelector('.mood-btn'));
-    }
-
-    function playMusic(src, btn) {
-        bgMusic.src = src;
-        bgMusic.volume = 0.25;
+        setTimeout(() => document.getElementById('overlay').style.display = 'none', 500);
+        bgMusic.volume = 0.2;
         bgMusic.play();
-        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
+        initCamera();
     }
-
-    function toggleMute() { bgMusic.paused ? bgMusic.play() : bgMusic.pause(); }
-
-    document.addEventListener('click', (e) => {
-        if(e.target.classList.contains('sfx-soft') || e.target.closest('.sfx-soft')) {
-            softClick.currentTime = 0;
-            softClick.volume = 0.15;
-            softClick.play();
-        }
-    });
-
-    document.addEventListener('input', (e) => {
-        if(e.target.classList.contains('sfx-asmr')) {
-            asmrType.currentTime = 0;
-            asmrType.volume = 0.1;
-            asmrType.play();
-        }
-    });
 
     const video = document.getElementById('video');
     const photoImg = document.getElementById('photo-result');
+
     async function initCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-        } catch (err) { console.log("Camera Off"); }
+        } catch (err) { console.log("Camera access denied"); }
     }
 
     function takeSnap() {
-        cameraSfx.play();
+        playSynthSound(800, 'sine', 0.2, 0.05);
         const canvas = document.getElementById('hidden-canvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -189,11 +131,11 @@
     }
 
     function doPrint() {
-        saveSfx.play();
+        playSynthSound(300, 'sine', 0.5, 0.1);
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'GRWM-FullDay-Planner.png';
+            link.download = 'My-Custom-GRWM.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
