@@ -3,167 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen Z Premium Mini Printer Planner</title>
+    <title>Gen Z Mini Printer Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent: #ff6b6b; --rose-gold: #b5838d; --genz-dark: #2b2d42; --neon-pink: #ff2d55; --printer-pink: #ffb7c5; }
-        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #4a4a4a; display: flex; flex-direction: column; align-items: center; padding: 15px; overflow-x: hidden; }
+        :root { --main-bg: #fdfaf5; --accent: #ff6b6b; --printer-pink: #ffb7c5; --rose-gold: #b5838d; }
+        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); display: flex; flex-direction: column; align-items: center; padding: 15px; }
         
-        /* 📜 Planner Paper */
-        .planner-paper { background: var(--card-bg); width: 100%; max-width: 480px; border-radius: 25px; padding: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.08); border: 2px solid var(--rose-gold); position: relative; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
-        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; margin-bottom: 5px; font-size: 28px; }
-        
-        .profile-section { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 15px; border-bottom: 1px dashed var(--rose-gold); padding-bottom: 10px; }
-        .profile-input { border: none; font-family: 'Itim'; font-size: 15px; color: #777; outline: none; background: transparent; }
+        /* แผ่นแพลนเนอร์ */
+        .planner-paper { background: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid var(--rose-gold); position: relative; overflow: hidden; }
+        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; font-size: 26px; margin: 0 0 15px; }
 
-        .snapshot-container { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
-        #camera-area { width: 100px; height: 100px; background: #f0f0f0; border-radius: 20px; overflow: hidden; position: relative; border: 3px solid var(--printer-pink); flex-shrink: 0; }
+        /* ส่วนกล้องและกลอน */
+        .snap-section { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
+        #camera-box { width: 110px; height: 110px; background: #eee; border-radius: 20px; overflow: hidden; border: 3px solid var(--printer-pink); flex-shrink: 0; position: relative; }
         #video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
-        #photo-result { display: none; }
-        .poem-box { flex: 1; font-family: 'Itim'; font-size: 16px; color: #6d6875; line-height: 1.5; text-align: center; background: #fff9f9; padding: 10px; border-radius: 15px; border: 1px dashed var(--printer-pink); }
-        .btn-snap { background: var(--printer-pink); color: white; border: none; padding: 5px 15px; border-radius: 50px; cursor: pointer; font-family: 'Itim'; font-size: 14px; margin-top: 5px; }
+        #photo-result { display: none; position: absolute; top:0; left:0; }
+        .poem { flex: 1; font-family: 'Itim'; font-size: 15px; color: #6d6875; text-align: center; background: #fff9f9; padding: 10px; border-radius: 15px; border: 1px dashed var(--printer-pink); }
 
-        .box { background: rgba(255,255,255,0.6); padding: 12px; border-radius: 18px; margin-bottom: 12px; border: 1px solid #eee; }
-        .box-title { font-weight: 700; margin-bottom: 8px; color: var(--accent); font-size: 15px; }
-        input { width: 100%; border: none; border-bottom: 1px dashed #ddd; padding: 4px; font-family: 'Kanit'; font-size: 13px; outline: none; background: transparent; }
-        
-        .todo-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-        .time-slot { display: flex; align-items: center; margin-bottom: 6px; }
-        .time-label { width: 60px; font-weight: 700; color: var(--accent); font-size: 13px; text-align: center; }
+        /* กล่องเนื้อหา */
+        .box { background: #fffcfc; padding: 12px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
+        .box-title { font-weight: 700; color: var(--accent); font-size: 15px; margin-bottom: 8px; }
+        input { width: 100%; border: none; border-bottom: 1px dashed #ddd; padding: 5px; font-family: 'Kanit'; font-size: 14px; outline: none; background: transparent; }
 
-        /* 🖨️ Cute Printer Button (The Star!) */
-        .printer-btn-container { margin: 25px 0; cursor: pointer; transition: 0.3s; position: relative; width: 120px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .printer-body { width: 80px; height: 50px; background: var(--printer-pink); border-radius: 10px 10px 5px 5px; position: relative; box-shadow: 0 6px 0 #e8a2af; }
-        .printer-top { width: 60px; height: 20px; background: #ffe4e8; border-radius: 5px 5px 0 0; position: absolute; top: -15px; left: 10px; }
-        .printer-slot { width: 50px; height: 6px; background: #ff8fa3; border-radius: 10px; position: absolute; top: 15px; left: 15px; }
-        .printer-btn-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 15px; font-size: 14px; text-align: center; }
-        .printer-btn-container:hover { transform: translateY(-5px) scale(1.1); }
-        .printer-btn-container:active { transform: translateY(2px); }
+        /* 🖨️ ปุ่มเครื่องปริ้นสุดคิวท์ */
+        .print-btn-wrap { margin: 20px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .printer-icon { width: 80px; height: 50px; background: var(--printer-pink); border-radius: 10px 10px 5px 5px; position: relative; box-shadow: 0 5px 0 #e8a2af; }
+        .printer-icon::before { content: ''; position: absolute; top: -12px; left: 12px; width: 56px; height: 15px; background: #ffe4e8; border-radius: 5px 5px 0 0; }
+        .printer-icon::after { content: ''; position: absolute; top: 15px; left: 15px; width: 50px; height: 6px; background: #ff8fa3; border-radius: 10px; }
+        .print-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 10px; }
+        .print-btn-wrap:hover { transform: scale(1.1); }
 
-        /* 🖨️ Printer Animation (ตอนกด) */
-        #printer-anim { display: none; position: fixed; top: 20px; right: 20px; z-index: 10000; width: 180px; text-align: center; background: white; padding: 15px; border-radius: 20px; border: 3px solid var(--printer-pink); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        @keyframes printProcess { 0% { top: -200px; } 20% { top: 20px; } 80% { top: 20px; } 100% { top: -200px; } }
-
-        .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 480px; border-radius: 25px; padding: 15px; border: 2px solid var(--neon-pink); margin-top: 10px; }
+        /* เพลง */
+        .music-box { width: 100%; max-width: 450px; border-radius: 20px; overflow: hidden; border: 2px solid #333; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div id="printer-anim">
-    <div style="width: 60px; height: 40px; background: var(--printer-pink); border-radius: 8px; margin: 0 auto 10px; position: relative;">
-        <div style="width: 40px; height: 10px; background: white; border-radius: 5px; position: absolute; bottom: 5px; left: 10px;"></div>
-    </div>
-    <div style="font-family: 'Itim'; color: var(--accent);">กำลังปริ้นท์รูปจ้า...</div>
-</div>
-
 <div class="planner-paper" id="capture-area">
-    <h1>✨ Personal Mini Planner</h1>
+    <h1>✨ My Morning Vibe</h1>
     
-    <div class="profile-section">
-        <input type="text" class="profile-input" style="width: 150px;" placeholder="🧸 ของใครน้า?..." id="owner-name">
-        <input type="text" class="profile-input" style="width: 120px; text-align: right;" id="date-today">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-family: 'Itim'; color: #888;">
+        <input type="text" placeholder="🧸 เจ้าของแพลนเนอร์..." style="width: 60%;">
+        <span id="display-date">วันที่...</span>
     </div>
 
-    <div class="snapshot-container">
-        <div id="camera-area">
+    <div class="snap-section">
+        <div id="camera-box">
             <video id="video" autoplay playsinline></video>
+            <canvas id="hidden-canvas" style="display:none;"></canvas>
             <img id="photo-result">
         </div>
-        <div class="poem-box">
-            "เริ่มต้นวันใหม่ด้วยรอยยิ้มนะ<br>เก่งที่สุดแล้วคนดี<br>ฉันรอส่งกำลังใจให้เสมอ"
-            <center><button class="btn-snap" id="snap-btn" onclick="takePhoto()">📸 แชะ!</button></center>
+        <div class="poem">
+            "ยิ้มให้ตัวเองเยอะๆ นะคนเก่ง<br>วันนี้ต้องเป็นวันที่ดีแน่นอน<br>สู้ๆ ฉันเป็นกำลังใจให้!"
+            <button onclick="takeSnap()" style="margin-top:8px; border:none; background:var(--printer-pink); color:white; border-radius:50px; padding:4px 12px; font-family:'Itim'; cursor:pointer;">📸 แชะ!</button>
         </div>
-    </div>
-
-    <div class="box" style="background: rgba(255,183,197,0.15); border-color: var(--printer-pink);">
-        <div class="box-title">💖 ลิสต์สำคัญ (ห้ามลืม!)</div>
-        <div class="todo-item">✨ <input type="text" placeholder="ภารกิจสุดปัง 1..."></div>
-        <div class="todo-item">✨ <input type="text" placeholder="เรื่องสำคัญ 2..."></div>
     </div>
 
     <div class="box">
-        <div class="box-title">⏰ Full Day Schedule</div>
-        <div class="time-slot"><span class="time-label">08:00</span><input type="text" placeholder="..."></div>
-        <div class="time-slot"><span class="time-label">12:00</span><input type="text" placeholder="..."></div>
-        <div class="time-slot"><span class="time-label">17:00</span><input type="text" placeholder="..."></div>
-        <div class="time-slot"><span class="time-label">18:15</span><input type="text" placeholder="..."></div>
+        <div class="box-title">💖 ลิสต์สำคัญ (ห้ามลืม!)</div>
+        <input type="text" placeholder="✨ ภารกิจวันนี้...">
+        <input type="text" placeholder="✨ ห้ามลืมเด็ดขาด...">
     </div>
 
-    <div class="box" style="text-align: center; font-size: 13px; color: #2196f3; font-weight: bold;">
-        🥤 ดื่มอะไรอร่อยๆ แล้วลุยต่อกันนะ! 😊
+    <div class="box">
+        <div class="box-title">⏰ Schedule</div>
+        <div style="display:flex; gap:10px; margin-bottom:5px;"><b>08:00</b> <input type="text" placeholder="..."></div>
+        <div style="display:flex; gap:10px;"><b>12:00</b> <input type="text" placeholder="..."></div>
     </div>
 </div>
 
-<div class="printer-btn-container" onclick="exportWithEffect()">
-    <div class="printer-top"></div>
-    <div class="printer-body">
-        <div class="printer-slot"></div>
-    </div>
-    <div class="printer-btn-text">กดเพื่อปริ้นท์รูปจ้า</div>
+<div class="print-btn-wrap" onclick="doPrint()">
+    <div class="printer-icon"></div>
+    <div class="print-text">ปริ้นท์ลงกระดาษจ้า</div>
 </div>
 
-<div class="music-card">
-    <div style="text-align:center; color:var(--neon-pink); font-weight:700; margin-bottom:10px; font-size:12px;">🎵 GEN-Z MIX (ซิ่งเลย ไม่ต้องรอ!)</div>
-    <div style="height:140px; border-radius:15px; overflow:hidden;">
-        <iframe id="music-player" width="100%" height="100%" 
-            src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1&loop=1&enablejsapi=1" 
-            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-        </iframe>
-    </div>
+<div class="music-box">
+    <iframe width="100%" height="120" src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
 </div>
 
 <script>
-    const now = new Date();
-    document.getElementById('date-today').value = "วันที่: " + now.toLocaleDateString('th-TH');
+    // ตั้งค่าวันที่
+    document.getElementById('display-date').innerText = new Date().toLocaleDateString('th-TH');
 
+    // เปิดกล้อง
     const video = document.getElementById('video');
-    const photoResult = document.getElementById('photo-result');
-    const snapBtn = document.getElementById('snap-btn');
+    const photoImg = document.getElementById('photo-result');
+    
+    async function initCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            video.srcObject = stream;
+        } catch (err) {
+            alert("กรุณากด 'อนุญาต' ให้ใช้กล้องนะครับ ไม่งั้นจะถ่ายรูปไม่ได้");
+        }
+    }
+    initCamera();
 
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-        .then(stream => { video.srcObject = stream; })
-        .catch(err => { console.log("Camera access denied"); });
-
-    function takePhoto() {
-        const canvas = document.createElement('canvas');
+    function takeSnap() {
+        const canvas = document.getElementById('hidden-canvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         canvas.getContext('2d').drawImage(video, 0, 0);
-        photoResult.src = canvas.toDataURL('image/png');
-        photoResult.style.display = 'block';
-        video.style.display = 'none';
-        snapBtn.innerText = "📸 ถ่ายใหม่";
+        photoImg.src = canvas.toDataURL('image/png');
+        photoImg.style.display = 'block';
     }
 
-    function exportWithEffect() {
-        const anim = document.getElementById('printer-anim');
-        anim.style.display = 'block';
-        anim.style.animation = 'printProcess 4s ease';
-
+    function doPrint() {
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
-            const ctx = canvas.getContext('2d');
-            const paperTexture = new Image();
-            paperTexture.src = 'https://www.transparenttextures.com/patterns/natural-paper.png'; 
-            paperTexture.onload = () => {
-                ctx.globalCompositeOperation = 'multiply';
-                ctx.globalAlpha = 0.4;
-                ctx.fillStyle = ctx.createPattern(paperTexture, 'repeat');
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.globalAlpha = 1.0;
-
-                const link = document.createElement('a');
-                link.download = 'My-Zen-Planner.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                setTimeout(() => { anim.style.display = 'none'; }, 4000);
-            };
+            const link = document.createElement('a');
+            link.download = 'My-Daily-Planner.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         });
     }
 </script>
-
 </body>
 </html>
