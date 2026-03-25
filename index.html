@@ -3,57 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen Z Mini Printer Planner</title>
+    <title>Gen Z Ultimate Printer Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --main-bg: #fdfaf5; --accent: #ff6b6b; --printer-pink: #ffb7c5; --rose-gold: #b5838d; --neon-pink: #ff2d55; }
+        :root { --main-bg: #fdfaf5; --accent: #ff6b6b; --printer-pink: #ffb7c5; --rose-gold: #b5838d; --soft-blue: #e3f2fd; --neon-pink: #ff2d55; }
         body { font-family: 'Kanit', sans-serif; background: var(--main-bg); display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; min-height: 100vh; }
 
-        /* หน้าจอก่อนเข้า (เพื่อปลดล็อกเพลง) */
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--printer-pink); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
-        .start-btn { padding: 20px 40px; font-size: 24px; font-family: 'Itim'; background: white; color: var(--accent); border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 0 #ff8fa3; transition: 0.2s; }
+        /* หน้าจอก่อนเข้า (ปลดล็อกเสียง) */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--printer-pink); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .start-btn { padding: 25px 50px; font-size: 26px; font-family: 'Itim'; background: white; color: var(--accent); border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #ff8fa3; transition: 0.2s; }
         .start-btn:active { transform: translateY(5px); box-shadow: 0 5px 0 #ff8fa3; }
 
-        /* แผ่นแพลนเนอร์ */
-        .planner-paper { background: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid var(--rose-gold); position: relative; overflow: hidden; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
-        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; font-size: 26px; margin: 0 0 15px; }
+        /* 📜 แผ่น Planner (จะถูกบันทึก) */
+        .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 2.5px solid var(--rose-gold); position: relative; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
+        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; font-size: 32px; margin: 0 0 10px; }
+        
+        .header-info { display: flex; justify-content: space-between; border-bottom: 2px dashed var(--rose-gold); padding-bottom: 15px; margin-bottom: 20px; }
+        .header-info input { border: none; font-family: 'Itim'; font-size: 18px; outline: none; background: transparent; width: 60%; }
 
-        /* ส่วนกล้องและกลอน */
-        .snap-section { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
-        #camera-box { width: 110px; height: 110px; background: #eee; border-radius: 20px; overflow: hidden; border: 3px solid var(--printer-pink); flex-shrink: 0; position: relative; }
+        /* Snapshot Section */
+        .snap-section { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        #camera-box { width: 120px; height: 120px; background: #eee; border-radius: 20px; overflow: hidden; border: 4px solid var(--printer-pink); flex-shrink: 0; position: relative; }
         #video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { display: none; position: absolute; top:0; left:0; }
-        .poem { flex: 1; font-family: 'Itim'; font-size: 15px; color: #6d6875; text-align: center; background: #fff9f9; padding: 10px; border-radius: 15px; border: 1px dashed var(--printer-pink); }
+        .poem { flex: 1; font-family: 'Itim'; font-size: 16px; color: #6d6875; text-align: center; background: #fff9f9; padding: 12px; border-radius: 20px; border: 1.5px dashed var(--printer-pink); }
 
-        /* 🖨️ ปุ่มเครื่องปริ้นสุดคิวท์ */
-        .print-btn-wrap { margin: 25px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
-        .printer-icon { width: 90px; height: 55px; background: var(--printer-pink); border-radius: 10px 10px 5px 5px; position: relative; box-shadow: 0 6px 0 #e8a2af; }
-        .printer-icon::before { content: ''; position: absolute; top: -15px; left: 15px; width: 60px; height: 18px; background: #ffe4e8; border-radius: 5px 5px 0 0; }
-        .printer-icon::after { content: ''; position: absolute; top: 18px; left: 20px; width: 50px; height: 6px; background: #ff8fa3; border-radius: 10px; }
-        .print-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 15px; font-size: 16px; }
-        .print-btn-wrap:hover { transform: translateY(-5px) scale(1.05); }
+        /* ⏰ Sleep & Wake Up Section */
+        .sleep-calc { background: var(--soft-blue); padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #b3e5fc; }
+        .sleep-calc h3 { margin: 0 0 10px; font-size: 16px; color: #0288d1; display: flex; align-items: center; gap: 8px; }
+        .sleep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .sleep-grid select, .sleep-grid input { padding: 8px; border-radius: 10px; border: 1px solid #ccc; font-family: 'Kanit'; }
 
-        .box { background: rgba(255,255,255,0.7); padding: 12px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
-        input { width: 100%; border: none; border-bottom: 1px dashed #ddd; padding: 5px; font-family: 'Kanit'; font-size: 14px; outline: none; background: transparent; }
+        /* 📅 Detailed Schedule */
+        .box { background: rgba(255,255,255,0.8); padding: 15px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #f0f0f0; }
+        .box-title { font-weight: 700; color: var(--accent); margin-bottom: 10px; font-size: 17px; }
+        .time-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid #f9f9f9; padding-bottom: 5px; }
+        .time-row b { width: 55px; color: var(--rose-gold); font-size: 13px; }
+        .time-row input { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; }
 
-        /* เพลง */
-        .music-card { background: #2b2d42; color: white; width: 100%; max-width: 450px; border-radius: 25px; padding: 15px; border: 2px solid var(--neon-pink); margin-top: 20px; }
+        /* 🖨️ Cute 3D Printer Button */
+        .print-btn-container { margin: 30px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .printer-3d { width: 100px; height: 60px; background: var(--printer-pink); border-radius: 15px 15px 8px 8px; position: relative; box-shadow: 0 8px 0 #e8a2af; }
+        .printer-3d::before { content: ''; position: absolute; top: -18px; left: 15px; width: 70px; height: 20px; background: #ffe4e8; border-radius: 8px 8px 0 0; }
+        .printer-3d::after { content: ''; position: absolute; top: 20px; left: 20px; width: 60px; height: 8px; background: #ff8fa3; border-radius: 10px; }
+        .print-text { font-family: 'Itim'; color: var(--accent); font-weight: bold; margin-top: 15px; font-size: 18px; }
+        .print-btn-container:hover { transform: translateY(-5px) scale(1.1); }
+
+        .music-card { background: #1a1a1a; width: 100%; max-width: 500px; border-radius: 30px; padding: 20px; border: 3px solid var(--neon-pink); margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <h2 style="font-family:'Itim'; color:white; margin-bottom:20px;">พร้อมลุยเช้านี้หรือยัง? ✨</h2>
-    <button class="start-btn" onclick="startApp()">กดเพื่อเริ่มซิ่ง! 🎵</button>
+    <h1 style="color:white; font-family:'Itim'; margin-bottom:30px;">Let's Start Your Day! 🌟</h1>
+    <button class="start-btn" onclick="startApp()">กดเพื่อเริ่มซิ่ง & ฟังเพลง! 🎵</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
-    <h1>🎀 Personal Morning Planner</h1>
+    <h1>🎀 My Ultimate Day Plan</h1>
     
-    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-family: 'Itim'; color: #888;">
-        <input type="text" placeholder="🧸 แพลนเนอร์ของ..." style="width: 60%;">
-        <span id="display-date">วันที่...</span>
+    <div class="header-info">
+        <input type="text" placeholder="🧸 แพลนเนอร์ของ..." id="owner">
+        <span id="date-now" style="color: #999; font-family: 'Itim';"></span>
     </div>
 
     <div class="snap-section">
@@ -63,57 +75,87 @@
             <img id="photo-result">
         </div>
         <div class="poem">
-            "ยิ้มให้ตัวเองเยอะๆ นะคนเก่ง<br>วันนี้ต้องเป็นวันที่ดีแน่นอน<br>สู้ๆ ฉันเป็นกำลังใจให้!"
-            <button onclick="takeSnap()" style="margin-top:8px; border:none; background:var(--printer-pink); color:white; border-radius:50px; padding:6px 15px; font-family:'Itim'; cursor:pointer;">📸 แชะ!</button>
+            "วันนี้คือโอกาสใหม่<br>ทำทุกนาทีให้มีความสุข<br>คนเก่งของฉัน สู้ๆ นะ!"
+            <button onclick="takeSnap()" style="margin-top:8px; border:none; background:var(--accent); color:white; border-radius:50px; padding:5px 15px; font-family:'Itim'; cursor:pointer;">📸 แชะ!</button>
         </div>
     </div>
 
-    <div class="box" style="background: #fff0f0;">
-        <div style="font-weight:bold; color:var(--accent); margin-bottom:8px;">💖 สำคัญมาก (ห้ามลืม!)</div>
-        <input type="text" placeholder="✨ ภารกิจสุดปัง...">
+    <div class="sleep-calc">
+        <h3>⏰ Morning Routine & Sleep</h3>
+        <div class="sleep-grid">
+            <div>
+                <label style="font-size: 12px;">เวลาตื่น:</label>
+                <input type="time" id="wake-time" onchange="suggestSleep()">
+            </div>
+            <div id="sleep-suggest" style="font-size: 11px; color: #444; line-height: 1.3;">
+                ใส่เวลาตื่นเพื่อดูเวลาควรนอนนะ 💤
+            </div>
+        </div>
     </div>
 
     <div class="box">
-        <div style="font-weight:bold; color:var(--accent); margin-bottom:8px;">⏰ ตารางเวลา</div>
-        <div style="display:flex; gap:10px; margin-bottom:5px;"><b>08:00</b> <input type="text" placeholder="..."></div>
-        <div style="display:flex; gap:10px;"><b>12:00</b> <input type="text" placeholder="..."></div>
+        <div class="box-title">📅 Full Day Schedule</div>
+        <div class="time-row"><b>07:00</b><input type="text" placeholder="Wake up & Start!"></div>
+        <div class="time-row"><b>09:00</b><input type="text" placeholder="Learning / Working..."></div>
+        <div class="time-row"><b>12:00</b><input type="text" placeholder="Lunch Break 🍱"></div>
+        <div class="time-row"><b>14:00</b><input type="text" placeholder="Focus Time..."></div>
+        <div class="time-row"><b>17:00</b><input type="text" placeholder="Workout / Chill..."></div>
+        <div class="time-row"><b>19:00</b><input type="text" placeholder="Dinner & Family"></div>
+        <div class="time-row"><b>21:00</b><input type="text" placeholder="Skincare & Relax"></div>
+        <div class="time-row"><b>23:00</b><input type="text" placeholder="Sweet Dreams 😴"></div>
     </div>
-    
-    <div style="text-align:center; font-size:12px; color:var(--accent); font-family:'Itim'; margin-top:10px;">
-        🥤 ดื่มอะไรอร่อยๆ แล้วลุยกันนะ!
+
+    <div class="box" style="background: #fff0f5;">
+        <div class="box-title">💖 Top Priorities</div>
+        <input type="text" placeholder="✨ 1. ................................" style="margin-bottom:5px;">
+        <input type="text" placeholder="✨ 2. ................................" style="margin-bottom:5px;">
+        <input type="text" placeholder="✨ 3. ................................">
+    </div>
+
+    <div style="text-align: center; color: var(--rose-gold); font-family: 'Itim'; font-size: 14px;">
+        🥤 วันนี้อย่าลืมดื่ม Ovaltine อุ่นๆ นะคนเก่ง!
     </div>
 </div>
 
-<div class="print-btn-wrap" onclick="doPrint()">
-    <div class="printer-icon"></div>
-    <div class="print-text">ปริ้นท์รูปเลยจ้า ✨</div>
+<div class="print-btn-container" onclick="doPrint()">
+    <div class="printer-3d"></div>
+    <div class="print-text">ปริ้นท์แพลนเนอร์สุดพรีเมียม ✨</div>
 </div>
 
 <div class="music-card">
-    <div style="text-align:center; color:var(--neon-pink); font-family:'Itim'; margin-bottom:10px;">🎵 GEN-Z MIX (กำลังซิ่ง...)</div>
-    <div id="player-container" style="height:120px; border-radius:15px; overflow:hidden;">
-        </div>
+    <div id="player-ui" style="height:150px; border-radius:20px; overflow:hidden;"></div>
 </div>
 
 <script>
-    // ตั้งค่าวันที่
-    document.getElementById('display-date').innerText = new Date().toLocaleDateString('th-TH');
+    document.getElementById('date-now').innerText = "วันที่: " + new Date().toLocaleDateString('th-TH');
 
     function startApp() {
-        // ซ่อนหน้าจอ Overlay
-        document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => { document.getElementById('overlay').style.display = 'none'; }, 500);
-
-        // โหลดเพลงและ Auto-play
-        document.getElementById('player-container').innerHTML = `
+        document.getElementById('overlay').style.display = 'none';
+        // Auto-play Music
+        document.getElementById('player-ui').innerHTML = `
             <iframe width="100%" height="100%" 
                 src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1" 
-                frameborder="0" allow="autoplay; encrypted-media">
-            </iframe>
-        `;
-        
-        // เริ่มระบบกล้อง
+                frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
         initCamera();
+    }
+
+    // ระบบแนะนำการนอน (90-min cycles)
+    function suggestSleep() {
+        const wake = document.getElementById('wake-time').value;
+        if(!wake) return;
+        const [h, m] = wake.split(':').map(Number);
+        const wakeDate = new Date();
+        wakeDate.setHours(h, m, 0);
+
+        // คำนวณถอยหลัง 5 และ 6 รอบ (7.5 และ 9 ชม.)
+        const sleep6 = new Date(wakeDate.getTime() - (9 * 60 * 60 * 1000));
+        const sleep5 = new Date(wakeDate.getTime() - (7.5 * 60 * 60 * 1000));
+
+        document.getElementById('sleep-suggest').innerHTML = `
+            ควรเข้านอนตอน: <br>
+            <b>${sleep6.getHours().toString().padStart(2,'0')}:${sleep6.getMinutes().toString().padStart(2,'0')}</b> (ดีที่สุด) <br>
+            หรือ <b>${sleep5.getHours().toString().padStart(2,'0')}:${sleep5.getMinutes().toString().padStart(2,'0')}</b>
+        `;
     }
 
     const video = document.getElementById('video');
@@ -123,9 +165,7 @@
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-        } catch (err) {
-            console.log("กล้องขัดข้อง หรือไม่ได้อนุญาต");
-        }
+        } catch (err) { alert("อนุญาตให้เข้าถึงกล้องด้วยนะจ๊ะ"); }
     }
 
     function takeSnap() {
@@ -140,17 +180,22 @@
     function doPrint() {
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
-            // เพิ่ม Texture กระดาษแบบจางๆ
             const ctx = canvas.getContext('2d');
-            ctx.globalCompositeOperation = 'multiply';
-            ctx.globalAlpha = 0.2;
-            ctx.fillStyle = "#f4ece1"; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const link = document.createElement('a');
-            link.download = 'My-Zen-Morning.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            
+            // เพิ่ม Paper Texture HD
+            const texture = new Image();
+            texture.src = 'https://www.transparenttextures.com/patterns/pinstriped-brown-paper.png';
+            texture.onload = () => {
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = ctx.createPattern(texture, 'repeat');
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                const link = document.createElement('a');
+                link.download = 'Premium-Planner.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            };
         });
     }
 </script>
