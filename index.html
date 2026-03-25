@@ -3,51 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate GRWM Sound & Music</title>
+    <title>Ultimate GRWM: Sleep & Music</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --cream: #fdfaf5; --brown: #a89078; --pink: #fbc4ab; --dark: #4a443f; }
-        body { font-family: 'Kanit', sans-serif; background: var(--cream); color: var(--dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
+        body { font-family: 'Kanit', sans-serif; background: var(--cream); color: var(--dark); display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; min-height: 100vh; }
 
-        /* 🎀 หน้าจอปลดล็อกเสียง */
-        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .start-btn { padding: 20px 60px; font-size: 24px; font-family: 'Itim'; background: var(--brown); color: white; border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 15px 30px rgba(168, 144, 120, 0.3); transition: 0.3s; }
-        .start-btn:hover { transform: translateY(-3px); background: #8e7964; }
+        /* 🎀 หน้าจอเริ่ม */
+        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .start-btn { padding: 20px 60px; font-size: 24px; font-family: 'Itim'; background: var(--brown); color: white; border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 20px rgba(168,144,120,0.3); }
 
-        .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; }
-        h1 { font-family: 'Itim'; color: var(--brown); text-align: center; font-size: 28px; margin-bottom: 20px; }
+        .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 25px; box-shadow: 0 30px 60px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; }
+        h1 { font-family: 'Itim'; color: var(--brown); text-align: center; margin-bottom: 15px; }
+
+        /* 💤 Sleep Calculator Box */
+        .sleep-box { background: #fff5f2; padding: 15px; border-radius: 25px; margin-bottom: 20px; border: 1.5px solid var(--pink); text-align: center; }
+        .sleep-box h3 { margin: 0 0 5px 0; font-size: 15px; color: #d48b78; font-family: 'Itim'; }
+        #sleep-suggestion { font-size: 17px; font-weight: bold; color: var(--brown); }
 
         /* 📸 Camera Section */
-        #camera-box { width: 100%; height: 200px; background: #f9f9f9; border-radius: 30px; overflow: hidden; border: 2.5px solid var(--pink); position: relative; margin-bottom: 10px; }
+        #camera-box { width: 100%; height: 180px; background: #f9f9f9; border-radius: 30px; overflow: hidden; border: 2px solid var(--pink); position: relative; margin-bottom: 10px; }
         video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { display: none; position: absolute; top:0; left:0; }
-        .snap-btn { border: none; background: var(--pink); color: #7a5c56; border-radius: 50px; padding: 8px 25px; font-family: 'Itim'; cursor: pointer; margin-bottom: 20px; }
+        .snap-btn { border: none; background: var(--pink); color: #7a5c56; border-radius: 50px; padding: 8px 20px; font-family: 'Itim'; cursor: pointer; margin-bottom: 15px; }
 
-        /* ⏰ Timeline */
-        .timeline { background: #fffcf9; padding: 20px; border-radius: 30px; border: 1px solid #f0f0f0; margin-bottom: 20px; }
-        .time-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 6px; }
-        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 5px; border-radius: 8px; font-family: 'Kanit'; font-weight: bold; color: var(--brown); width: 85px; }
+        /* ⏰ Detailed Timeline */
+        .timeline { background: #fffcf9; padding: 15px; border-radius: 25px; border: 1px solid #f0f0f0; margin-bottom: 20px; }
+        .time-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 5px; }
+        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 5px; border-radius: 8px; font-family: 'Kanit'; font-weight: bold; color: var(--brown); width: 85px; cursor: pointer; }
         .time-row input[type="text"] { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #555; }
 
-        .save-btn { background: var(--brown); color: white; border: none; padding: 18px 50px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; }
-        
-        /* 🎵 Volume Status */
-        .music-status { font-size: 12px; color: var(--brown); margin-top: 15px; opacity: 0.7; }
+        /* 🎵 Music Player Controls */
+        .music-player { background: white; padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .music-btn { border: none; background: none; font-size: 20px; cursor: pointer; transition: 0.2s; filter: grayscale(1); }
+        .music-btn.active { filter: grayscale(0); transform: scale(1.2); }
+
+        .save-btn { background: var(--brown); color: white; border: none; padding: 18px 50px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <div style="font-size: 50px; margin-bottom: 15px;">☕🎧</div>
-    <h2 style="font-family:'Itim'; color:var(--brown); margin-bottom:10px;">Get Ready With Me</h2>
-    <p style="margin-bottom: 30px; color: #888;">กดปุ่มเพื่อเปิดเพลง Lo-fi และเสียง ASMR</p>
-    <button class="start-btn" onclick="startEverything()">START PLANNER</button>
+    <div style="font-size: 60px; margin-bottom: 20px;">🎧✨</div>
+    <h2 style="font-family:'Itim'; color:var(--brown);">พร้อมสำหรับวันที่แสนพิเศษหรือยัง?</h2>
+    <p style="color: #999; margin-bottom: 30px;">กดเพื่อเปิดเพลงและระบบคำนวณการนอน</p>
+    <button class="start-btn" onclick="startApp()">START PLANNER</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
     <h1>My Daily Planner</h1>
     
+    <div class="sleep-box">
+        <h3>🌙 Sleep Suggestion</h3>
+        <div id="sleep-suggestion">จิ้มที่ "เวลาตื่น" เพื่อคำนวณเวลานอน</div>
+        <p style="font-size: 10px; color: #d48b78; margin: 5px 0 0 0;">*นอนครบ 5 รอบ (7.5 ชม.) จะทำให้ตื่นมาสดชื่นที่สุด</p>
+    </div>
+
     <div id="camera-box">
         <video id="video" autoplay playsinline></video>
         <canvas id="hidden-canvas" style="display:none;"></canvas>
@@ -55,67 +67,92 @@
     </div>
     <center><button onclick="takeSnap()" class="snap-btn">📸 Take a Snap</button></center>
 
-    <div class="timeline" id="rows-container"></div>
-    
-    <div style="text-align: center; font-family:'Itim'; opacity: 0.5; font-size: 12px;">"Ovaltine in the morning, Good night in the evening"</div>
+    <div class="timeline" id="rows-container">
+        </div>
+</div>
+
+<div class="music-player">
+    <button class="music-btn active" onclick="changeMusic(0, this)" title="Lofi">📻</button>
+    <button class="music-btn" onclick="changeMusic(1, this)" title="Nature">🍃</button>
+    <button class="music-btn" onclick="changeMusic(2, this)" title="Coffee Shop">☕</button>
+    <span id="track-name" style="font-size: 12px; color: var(--brown);">Now Playing: Lofi</span>
 </div>
 
 <button class="save-btn" onclick="doPrint()">บันทึกรูปแพลนเนอร์ ✨</button>
-<div class="music-status" id="m-status">🎵 Music: Paused</div>
 
 <script>
     let audioCtx;
-    let bgMusic;
+    let bgMusic = new Audio();
+    const tracks = [
+        { name: "Lofi Vibes", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+        { name: "Nature Rain", url: "https://actions.google.com/sounds/v1/water/rain_on_roof.ogg" },
+        { name: "Quiet Cafe", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }
+    ];
 
-    // ระบบสร้างเสียง ASMR แบบสังเคราะห์ (Internal Synth)
-    function playBeep(freq, dur, vol = 0.05) {
+    function playBeep(freq, dur) {
         if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
         osc.connect(gain); gain.connect(audioCtx.destination);
         osc.start(); osc.stop(audioCtx.currentTime + dur);
     }
 
-    // ข้อมูลเริ่มต้น
+    function calculateSleep(wakeTime) {
+        const [h, m] = wakeTime.split(':').map(Number);
+        const d = new Date(); d.setHours(h, m, 0);
+        // คำนวณถอยหลัง 7.5 ชม. (5 รอบการนอน) + 15 นาทีเวลาเคลิ้มหลับ
+        const sleepTime = new Date(d.getTime() - (7.5 * 60 * 60 * 1000) - (15 * 60 * 1000));
+        const sh = sleepTime.getHours().toString().padStart(2, '0');
+        const sm = sleepTime.getMinutes().toString().padStart(2, '0');
+        document.getElementById('sleep-suggestion').innerText = `ถ้าตื่น ${wakeTime} น. ควรเข้านอนตอน ${sh}:${sm} น.`;
+    }
+
     const schedules = [
-        { t: "06:00", d: "Wake up & Skincare 🧴" },
-        { t: "07:30", d: "Ovaltine Time 🥤" },
-        { t: "09:00", d: "Study / Work Session" },
-        { t: "12:00", d: "Lunch & Rest 🍱" },
-        { t: "19:30", d: "Dinner & Family" },
-        { t: "22:00", d: "Night Routine 📖" },
-        { t: "22:30", d: "Sleep 😴" }
+        { t: "06:00", d: "Wake up & Refresh ☁️", wake: true },
+        { t: "06:30", d: "Morning Skincare 🧴" },
+        { t: "07:30", d: "Ovaltine & Healthy Breakfast 🥤" },
+        { t: "09:00", d: "Study Session 1" },
+        { t: "12:00", d: "Lunch Break 🍱" },
+        { t: "13:30", d: "Study Session 2" },
+        { t: "16:00", d: "Break & Snack 🍎" },
+        { t: "18:00", d: "Workout / Walk 🏃‍♀️" },
+        { t: "20:00", d: "Dinner Time" },
+        { t: "21:30", d: "Night Routine 📖" },
+        { t: "22:30", d: "Sleep Well 😴" }
     ];
 
     const container = document.getElementById('rows-container');
     schedules.forEach(item => {
         container.innerHTML += `
             <div class="time-row">
-                <input type="time" value="${item.t}" onchange="playBeep(500, 0.1)">
-                <input type="text" value="${item.d}" oninput="playBeep(180, 0.05)" placeholder="กิจกรรม...">
+                <input type="time" value="${item.t}" onchange="${item.wake ? `calculateSleep(this.value);` : ''} playBeep(500, 0.1)">
+                <input type="text" value="${item.d}" oninput="playBeep(180, 0.05)">
             </div>
         `;
     });
 
-    function startEverything() {
-        // 1. เปิดใช้งาน Audio Context
+    function startApp() {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // 2. โหลดเพลง Lo-fi (ใช้ Paused และ Play เพื่อปลดล็อก Browser)
-        bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3');
-        bgMusic.loop = true;
-        bgMusic.volume = 0.2; // เสียงเพลงคลอเบาๆ
-        bgMusic.play().then(() => {
-            document.getElementById('m-status').innerText = "🎵 Music: Playing Lo-fi Vibes";
-        }).catch(e => console.log("Music Error:", e));
-
-        // 3. ซ่อนหน้า Overlay และเริ่มกล้อง
         document.getElementById('overlay').style.display = 'none';
+        changeMusic(0, document.querySelector('.music-btn'));
+        calculateSleep("06:00");
         initCamera();
+    }
+
+    function changeMusic(index, btn) {
+        bgMusic.pause();
+        bgMusic.src = tracks[index].url;
+        bgMusic.loop = true;
+        bgMusic.volume = 0.2;
+        bgMusic.play();
+        
+        document.querySelectorAll('.music-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('track-name').innerText = "Now Playing: " + tracks[index].name;
     }
 
     async function initCamera() {
@@ -127,7 +164,7 @@
     }
 
     function takeSnap() {
-        playBeep(800, 0.2, 0.1);
+        playBeep(800, 0.2);
         const video = document.getElementById('video');
         const img = document.getElementById('photo-result');
         const canvas = document.getElementById('hidden-canvas');
@@ -138,13 +175,12 @@
     }
 
     function doPrint() {
-        playBeep(300, 0.5, 0.1);
-        const area = document.getElementById('capture-area');
-        html2canvas(area, { scale: 3 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'My-Ultimate-GRWM.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+        playBeep(300, 0.5);
+        html2canvas(document.getElementById('capture-area'), { scale: 3 }).then(canvas => {
+            const a = document.createElement('a');
+            a.download = 'My-Daily-Planner.png';
+            a.href = canvas.toDataURL();
+            a.click();
         });
     }
 </script>
