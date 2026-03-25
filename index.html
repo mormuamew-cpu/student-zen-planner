@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen Z Personal Little Planner</title>
+    <title>Gen Z Personal Little Planner & Care</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent: #ff6b6b; --soft-blue: #e3f2fd; --genz-dark: #1a1a1a; --neon-pink: #ff2d55; }
-        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 15px; overflow-x: hidden; }
         
         /* 📸 ส่วนแผ่น Planner (ส่วนที่จะถูกบันทึกเป็นรูป) */
         .planner-paper { background: var(--card-bg); width: 100%; max-width: 480px; border-radius: 30px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #fff0f0; position: relative; }
@@ -42,11 +42,26 @@
         .care-tip { background: var(--soft-blue); padding: 8px; border-radius: 10px; font-size: 12px; margin-top: 6px; border-left: 5px solid #90caf9; color: #0c5460; }
         
         /* UI Elements (จะไม่ถูกบันทึก) */
-        .btn-save { width: 100%; max-width: 480px; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 50px; font-size: 18px; cursor: pointer; margin: 15px 0; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.2); }
+        .btn-save { width: 100%; max-width: 480px; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 50px; font-size: 18px; cursor: pointer; margin: 15px 0; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.2); transition: 0.3s; }
+        .btn-save:hover { background: #ff8585; transform: scale(1.02); }
         .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 480px; border-radius: 25px; padding: 15px; border: 2px solid var(--neon-pink); margin-top: 10px; }
+        
+        /* 🖨️ Printer Effect Animation Styles (จะไม่ถูกเซฟลงในรูป) */
+        #printer-container { display: none; position: fixed; top: -150px; right: 20px; z-index: 10000; width: 180px; height: 130px; border-radius: 20px; background: #fff; padding: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #ffb7c5; }
+        #printer-machine { width: 100%; height: 60px; background: #ffb7c5; border-radius: 10px; position: relative; margin-top: 10px; }
+        #printer-machine::after { content: ''; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 100px; height: 10px; background: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        #printer-status { text-align: center; color: #ff6b6b; font-weight: 700; font-size: 12px; }
+        
+        @keyframes printIn { 0% { top: -150px; } 20% { top: 20px; } 80% { top: 20px; } 100% { top: -150px; } }
+        @keyframes printOut { 0% { height: 0; } 100% { height: 80px; } }
     </style>
 </head>
 <body>
+
+<div id="printer-container">
+    <div id="printer-machine"></div>
+    <div id="printer-status">กำลังปริ้นท์... ปริ้นท์...</div>
+</div>
 
 <div class="planner-paper" id="capture-area">
     <h1>🎀 Personal Mini Planner</h1>
@@ -92,7 +107,7 @@
     </div>
 </div>
 
-<button class="btn-save" onclick="saveImage()">📥 บันทึกเฉพาะแผ่น Planner (ปุกปิก)</button>
+<button class="btn-save" onclick="exportWithPrinterEffect()">📥 บันทึกพร้อมเอฟเฟกต์ปริ้นท์และลายกระดาษ</button>
 
 <div class="music-card">
     <div style="text-align:center; color:var(--neon-pink); font-weight:700; margin-bottom:10px; font-size:12px;">🎵 GEN-Z BOOSTER MIX (กด Next ได้เลย!)</div>
@@ -129,14 +144,37 @@
         snapBtn.innerText = "📸 ถ่ายใหม่";
     }
 
-    // เซฟรูปภาพเฉาพะแผ่น Planner (id="capture-area")
-    function saveImage() {
+    // ฟังก์ชันเซฟรูปภาพพร้อมเอฟเฟกต์ปริ้นท์และลายกระดาษ (id="capture-area")
+    function exportWithPrinterEffect() {
+        const printerContainer = document.getElementById('printer-container');
+        printerContainer.style.display = 'block';
+        printerContainer.style.animation = 'printIn 4s ease';
+
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 2 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'My-Personal-Planner.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            const ctx = canvas.getContext('2d');
+
+            // --- 🖨️ เพิ่มเอฟเฟกต์เท็กเจอร์กระดาษ ---
+            const paperTexture = new Image();
+            paperTexture.src = 'https://www.transparenttextures.com/patterns/natural-paper.png'; // ลายกระดาษธรรมชาติ
+            paperTexture.onload = () => {
+                // วางลายกระดาษทับลงไป
+                ctx.globalCompositeOperation = 'overlay'; // ใช้โหมด Overlay เพื่อผสานลายกระดาษ
+                ctx.globalAlpha = 0.5; // ปรับความโปร่งแสงของลายกระดาษไม่ให้ชัดเกินไป
+                ctx.fillStyle = ctx.createPattern(paperTexture, 'repeat');
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.globalCompositeOperation = 'source-over'; // เปลี่ยนกลับเป็นโหมดปกติ
+                ctx.globalAlpha = 1.0;
+
+                // ดาวน์โหลดรูปภาพ
+                const link = document.createElement('a');
+                link.download = 'My-Zen-Morning.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // ซ่อนเครื่องปริ้นเมื่อปริ้นเสร็จ
+                setTimeout(() => { printerContainer.style.display = 'none'; }, 500);
+            };
         });
     }
 </script>
