@@ -3,31 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Day Sleep & Routine Planner</title>
+    <title>Ultimate GRWM Sleep & Camera Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --cream: #fdfaf5; --brown: #a89078; --pink: #fbc4ab; --dark: #4a443f; }
         body { font-family: 'Kanit', sans-serif; background: var(--cream); color: var(--dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
 
-        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
         .start-btn { padding: 18px 60px; font-size: 22px; font-family: 'Itim'; background: var(--brown); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(168, 144, 120, 0.2); }
 
         .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; }
         h1 { font-family: 'Itim'; color: var(--brown); text-align: center; font-size: 28px; margin-bottom: 20px; }
 
-        /* 💤 Advanced Sleep Box */
-        .sleep-goal-box { background: #fff5f2; padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1.5px solid var(--pink); display: flex; flex-direction: column; gap: 10px; }
-        .sleep-goal-box h3 { margin: 0; font-size: 16px; color: #d48b78; text-align: center; font-family: 'Itim'; }
+        /* 💤 Sleep Goal Box */
+        .sleep-goal-box { background: #fff5f2; padding: 15px; border-radius: 25px; margin-bottom: 20px; border: 1.5px solid var(--pink); }
+        .sleep-goal-box h3 { margin: 0 0 10px 0; font-size: 15px; color: #d48b78; text-align: center; font-family: 'Itim'; }
         .sleep-input-row { display: flex; justify-content: space-around; align-items: center; }
-        .sleep-input-item { text-align: center; }
-        .sleep-input-item label { font-size: 12px; display: block; margin-bottom: 5px; color: #888; }
-        .sleep-input-item input { border: none; background: white; padding: 8px; border-radius: 12px; font-family: 'Kanit'; font-weight: bold; color: var(--brown); text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        .sleep-input-item label { font-size: 11px; display: block; color: #888; text-align: center; }
+        .sleep-input-item input { border: none; background: white; padding: 5px; border-radius: 10px; font-family: 'Kanit'; font-weight: bold; color: var(--brown); text-align: center; }
 
-        /* ⏰ Detailed Timeline */
+        /* 📸 Camera Section */
+        .snap-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; align-items: center; }
+        #camera-box { width: 100%; height: 200px; background: #f9f9f9; border-radius: 30px; overflow: hidden; border: 2.5px solid var(--pink); position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+        video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
+        #photo-result { display: none; position: absolute; top:0; left:0; }
+        .snap-btn { border: none; background: var(--pink); color: #7a5c56; border-radius: 50px; padding: 8px 25px; font-family: 'Itim'; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .snap-btn:active { transform: scale(0.95); }
+
+        /* ⏰ Timeline */
         .timeline { background: #fffcf9; padding: 20px; border-radius: 30px; border: 1px solid #f0f0f0; margin-bottom: 20px; }
-        .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 8px; }
-        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 6px; border-radius: 10px; font-family: 'Kanit'; font-size: 14px; color: var(--brown); font-weight: bold; width: 90px; }
+        .time-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 6px; }
+        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 5px; border-radius: 8px; font-family: 'Kanit'; font-size: 13px; color: var(--brown); font-weight: bold; width: 85px; }
         .time-row input[type="text"] { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #555; }
 
         .save-btn { background: var(--brown); color: white; border: none; padding: 18px 50px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; margin-top: 10px; }
@@ -36,35 +43,43 @@
 <body>
 
 <div id="overlay">
-    <h2 style="font-family:'Itim'; color:var(--brown); margin-bottom:20px;">Get Ready With Me ✨</h2>
-    <button class="start-btn" onclick="startApp()">เข้าสู่แพลนเนอร์</button>
+    <h2 style="font-family:'Itim'; color:var(--brown); margin-bottom:20px;">Get Ready With Me: Full Day ✨</h2>
+    <button class="start-btn" onclick="startApp()">Start Planning</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
     <h1>My Daily Planner</h1>
     
     <div class="sleep-goal-box">
-        <h3>🌙 Sleep Planning (ตั้งเป้าหมายการนอน)</h3>
+        <h3>🌙 Sleep Goals</h3>
         <div class="sleep-input-row">
             <div class="sleep-input-item">
-                <label>เวลาเข้านอน</label>
+                <label>ควรนอน</label>
                 <input type="time" value="22:30" onchange="playBeep(400, 0.1)">
             </div>
-            <div style="font-size: 20px; padding-top: 15px;">➡️</div>
+            <div style="font-size: 18px; color: var(--pink);">♥</div>
             <div class="sleep-input-item">
-                <label>เวลาตื่นนอน</label>
+                <label>ตั้งใจตื่น</label>
                 <input type="time" value="06:00" onchange="playBeep(600, 0.1)">
             </div>
         </div>
-        <p style="font-size: 11px; color: #a89078; text-align: center; margin: 5px 0 0 0;">"การนอนที่มีคุณภาพ คือกุญแจของวันที่มีความสุข"</p>
+    </div>
+
+    <div class="snap-section">
+        <div id="camera-box">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="hidden-canvas" style="display:none;"></canvas>
+            <img id="photo-result">
+        </div>
+        <button onclick="takeSnap()" class="snap-btn">📸 Take a Snap</button>
     </div>
 
     <div class="timeline">
-        <div style="font-weight:700; color:var(--brown); margin-bottom:15px; font-size:14px;">📅 ตารางกิจกรรมทั้งวัน (แก้ไขได้ทุกช่อง)</div>
+        <div style="font-weight:700; color:var(--brown); margin-bottom:12px; font-size:14px;">📅 My Routine (แก้ไขได้ทุกช่อง)</div>
         <div id="rows-container"></div>
     </div>
     
-    <div style="text-align: center; font-family:'Itim'; opacity: 0.5; font-size: 13px;">"Make today worth remembering"</div>
+    <div style="text-align: center; font-family:'Itim'; opacity: 0.5; font-size: 12px;">— today is a good day to be happy —</div>
 </div>
 
 <button class="save-btn" onclick="doPrint()">บันทึกรูปแพลนเนอร์ ✨</button>
@@ -78,25 +93,25 @@
         const gain = audioCtx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
         osc.connect(gain); gain.connect(audioCtx.destination);
         osc.start(); osc.stop(audioCtx.currentTime + dur);
     }
 
     const schedules = [
-        { t: "06:00", d: "Wake up & Refresh ☁️" },
-        { t: "06:30", d: "Skincare & Morning Prep 🧴" },
-        { t: "07:30", d: "Ovaltine & Healthy Breakfast 🥤" },
-        { t: "09:00", d: "Session 1: Deep Work / Class" },
-        { t: "12:00", d: "Lunch Break & Relax 🍱" },
-        { t: "13:30", d: "Session 2: Activity / Study" },
-        { t: "16:00", d: "Snack Time & Chill 🍎" },
-        { t: "18:00", d: "Evening Workout / Walk" },
-        { t: "19:30", d: "Dinner with Family 🏠" },
-        { t: "21:00", d: "Relax & Read a Book 📖" },
-        { t: "22:00", d: "Night Routine & Skincare 🧴" },
-        { t: "22:30", d: "Off to Sleep 😴" }
+        { t: "06:00", d: "Wake up & Skincare 🧴" },
+        { t: "06:30", d: "Fresh Morning Exercise 🏃‍♀️" },
+        { t: "07:30", d: "Ovaltine & Breakfast 🥤" },
+        { t: "09:00", d: "Study / Work Session 1" },
+        { t: "12:00", d: "Lunch & Chill Break 🍱" },
+        { t: "13:30", d: "Study / Work Session 2" },
+        { t: "16:00", d: "Afternoon Snack 🍎" },
+        { t: "18:00", d: "Review Notes / Projects" },
+        { t: "19:30", d: "Dinner & Family Time 🏠" },
+        { t: "21:00", d: "Relax / Forest Bathing Sounds" },
+        { t: "22:00", d: "Night Routine 📖" },
+        { t: "22:30", d: "Off to Sleep... Good Night 😴" }
     ];
 
     const container = document.getElementById('rows-container');
@@ -104,22 +119,44 @@
         container.innerHTML += `
             <div class="time-row">
                 <input type="time" value="${item.t}" onchange="playBeep(500, 0.1)">
-                <input type="text" value="${item.d}" oninput="playBeep(150, 0.05)" placeholder="กิจกรรม...">
+                <input type="text" value="${item.d}" oninput="playBeep(180, 0.04)" placeholder="พิมพ์กิจกรรม...">
             </div>
         `;
     });
 
     function startApp() {
-        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay').style.opacity = '0';
+        setTimeout(() => document.getElementById('overlay').style.display = 'none', 500);
         if (audioCtx) audioCtx.resume();
+        initCamera();
+    }
+
+    const video = document.getElementById('video');
+    const photoImg = document.getElementById('photo-result');
+
+    async function initCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            video.srcObject = stream;
+        } catch (err) { console.log("Camera access denied"); }
+    }
+
+    function takeSnap() {
+        playBeep(800, 0.2);
+        const canvas = document.getElementById('hidden-canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        photoImg.src = canvas.toDataURL('image/png');
+        photoImg.style.display = 'block';
     }
 
     function doPrint() {
-        playBeep(300, 0.5);
+        playBeep(350, 0.6);
         const area = document.getElementById('capture-area');
-        html2canvas(area, { scale: 3 }).then(canvas => {
+        html2canvas(area, { scale: 3, useCORS: true }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'My-FullDay-Sleep-Planner.png';
+            link.download = 'My-Ultimate-GRWM.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
