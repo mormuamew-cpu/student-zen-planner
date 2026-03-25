@@ -3,90 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen Z Full Day Planner & Care</title>
+    <title>Gen Z Personal Little Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent: #ff6b6b; --soft-blue: #e3f2fd; --genz-dark: #1a1a1a; --neon-pink: #ff2d55; }
-        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 15px; }
         
-        .planner-card { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 35px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid #fff0f0; margin-bottom: 20px; }
-        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; margin-bottom: 5px; font-size: 30px; }
-        .greeting { text-align: center; font-size: 16px; margin-bottom: 15px; color: #777; font-family: 'Itim'; }
+        /* 📸 ส่วนแผ่น Planner (ส่วนที่จะถูกบันทึกเป็นรูป) */
+        .planner-paper { background: var(--card-bg); width: 100%; max-width: 480px; border-radius: 30px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #fff0f0; position: relative; }
+        h1 { font-family: 'Itim'; color: var(--accent); text-align: center; margin-bottom: 5px; font-size: 28px; }
+        
+        /* ข้อมูลส่วนตัว */
+        .profile-section { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 15px; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
+        .profile-input { border: none; font-family: 'Itim'; font-size: 14px; color: #777; outline: none; background: transparent; }
 
-        #camera-area { width: 100%; height: 260px; background: #f0f0f0; border-radius: 25px; margin-bottom: 10px; overflow: hidden; position: relative; border: 2px dashed #ffb7c5; display: flex; align-items: center; justify-content: center; }
+        /* 📸 ส่วน Snapshot เล็กจิ๋ว (แปะข้างกลอน) */
+        .snapshot-container { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
+        #camera-area { width: 100px; height: 100px; background: #f0f0f0; border-radius: 20px; overflow: hidden; position: relative; border: 2px dashed #ffb7c5; flex-shrink: 0; }
         #video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { display: none; }
-        .btn-snap { background: #ffb7c5; color: white; border: none; padding: 8px 20px; border-radius: 50px; cursor: pointer; margin: 5px 0 15px; font-family: 'Itim'; font-size: 16px; }
+        .poem-box { flex: 1; font-family: 'Itim'; font-size: 16px; color: #ff6b6b; line-height: 1.5; text-align: center; background: #fff9f9; padding: 10px; border-radius: 15px; border: 1px dashed #ffb7c5; }
+        .btn-snap { background: #ffb7c5; color: white; border: none; padding: 5px 15px; border-radius: 50px; cursor: pointer; font-family: 'Itim'; font-size: 14px; margin-top: 5px; }
 
-        .box { background: #fffcfc; padding: 15px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #fff5f5; }
-        .box-title { font-weight: 700; margin-bottom: 10px; color: #ff8585; font-size: 16px; }
-        .time-slot { display: flex; align-items: center; margin-bottom: 8px; }
-        .time-label { width: 65px; font-weight: 700; color: #ff6b6b; font-size: 14px; }
-        input[type="text"] { flex: 1; border: none; border-bottom: 1px dashed #ddd; padding: 4px; font-family: 'Kanit'; outline: none; background: transparent; }
-
-        .poem-box { font-family: 'Itim'; font-size: 18px; text-align: center; color: #ff6b6b; line-height: 1.5; padding: 12px; border: 2px dashed #ffb7c5; border-radius: 20px; margin-bottom: 15px; background: #fff9f9; }
-        .care-tip { background: var(--soft-blue); padding: 10px; border-radius: 12px; font-size: 13px; margin-top: 8px; border-left: 5px solid #90caf9; }
+        /* Box Styles */
+        .box { background: #fffcfc; padding: 12px; border-radius: 15px; margin-bottom: 12px; border: 1px solid #fff5f5; }
+        .box-title { font-weight: 700; margin-bottom: 8px; color: #ff8585; font-size: 15px; display: flex; align-items: center; gap: 6px; }
+        input, select, textarea { width: 100%; border: none; border-bottom: 1px dashed #f0f0f0; padding: 4px; font-family: 'Kanit'; font-size: 13px; outline: none; background: transparent; color: #555; }
         
-        .btn-save { width: 100%; max-width: 550px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 50px; font-size: 20px; cursor: pointer; margin-bottom: 20px; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.3); }
-        .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 550px; border-radius: 30px; padding: 20px; border: 2px solid var(--neon-pink); }
+        /* 🔥 Gen Z To-do List */
+        .todo-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .todo-item input[type="text"] { border-bottom: 1px solid #eee; }
+
+        /* Time Slot Style */
+        .time-slot { display: flex; align-items: center; margin-bottom: 6px; }
+        .time-label { width: 55px; font-weight: 700; color: #ff6b6b; font-size: 13px; text-align: center; }
+
+        .care-tip { background: var(--soft-blue); padding: 8px; border-radius: 10px; font-size: 12px; margin-top: 6px; border-left: 5px solid #90caf9; color: #0c5460; }
+        
+        /* UI Elements (จะไม่ถูกบันทึก) */
+        .btn-save { width: 100%; max-width: 480px; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 50px; font-size: 18px; cursor: pointer; margin: 15px 0; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.2); }
+        .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 480px; border-radius: 25px; padding: 15px; border: 2px solid var(--neon-pink); margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="planner-card" id="capture-area">
-    <h1>☀️ Full Day Booster ☀️</h1>
-    <div class="greeting" id="time-now">กำลังโหลดเวลา...</div>
-
-    <div class="poem-box">
-        "เริ่มต้นเช้าวันใหม่ด้วยใจใส<br>เหนื่อยแค่ไหนขอให้ยิ้มสู้ต่อ<br>เก่งที่สุดแล้วคนดีไม่ต้องท้อ<br>ฉันจะรอส่งใจให้ในทุกวัน"
+<div class="planner-paper" id="capture-area">
+    <h1>🎀 Personal Mini Planner</h1>
+    
+    <div class="profile-section">
+        <input type="text" class="profile-input" style="width: 150px;" placeholder="🧸 ของใครน้า?..." id="owner-name">
+        <input type="text" class="profile-input" style="width: 120px; text-align: right;" id="date-today">
     </div>
 
-    <div id="camera-area">
-        <video id="video" autoplay playsinline></video>
-        <img id="photo-result">
+    <div class="snapshot-container">
+        <div id="camera-area">
+            <video id="video" autoplay playsinline></video>
+            <img id="photo-result">
+        </div>
+        <div class="poem-box">
+            "ยิ้มกว้างๆ ให้ตัวเองนะคนเก่ง<br>เช้านี้สดใสพร้อมลุยต่อ<br>ไม่ต้องท้อฉันรอส่งใจให้"
+            <center><button class="btn-snap" id="snap-btn" onclick="takePhoto()">📸 แชะ!</button></center>
+        </div>
     </div>
-    <center><button class="btn-snap" onclick="takePhoto()">📸 ถ่ายรูปเช้านี้</button></center>
+
+    <div class="box" style="background: #fff0f0; border-color: #ffb7c5;">
+        <div class="box-title">💖 ลิสต์สำคัญวันนี้ (ห้ามลืมนะ!)</div>
+        <div class="todo-item">✨ <input type="text" placeholder="ภารกิจสุดปัง 1..."></div>
+        <div class="todo-item">✨ <input type="text" placeholder="เรื่องสำคัญ 2..."></div>
+    </div>
 
     <div class="box">
-        <div class="box-title">⏰ ตารางเวลาของวันนี้</div>
+        <div class="box-title">⏰ Full Day Schedule</div>
         <div class="time-slot"><span class="time-label">08:00</span><input type="text" placeholder="..."></div>
-        <div class="time-slot"><span class="time-label">09:00</span><input type="text" placeholder="..."></div>
         <div class="time-slot"><span class="time-label">12:00</span><input type="text" placeholder="..."></div>
-        <div class="time-slot"><span class="time-label">13:00</span><input type="text" placeholder="..."></div>
         <div class="time-slot"><span class="time-label">17:00</span><input type="text" placeholder="..."></div>
         <div class="time-slot"><span class="time-label">18:15</span><input type="text" placeholder="..."></div>
     </div>
 
     <div class="box">
-        <div class="box-title">📊 สุขภาพ & เทคแคร์</div>
-        <div class="care-tip">🥤 <b>ดื่มอะไรดี:</b> เช้านี้น้ำอัดลมซ่าๆ หรือนมเย็นๆ สักขวดนะ</div>
-        <div class="care-tip" style="background: #e8f5e9; color: #2e7d32; border-left: 5px solid #a5d6a7;">🍱 <b>หิวไหม:</b> "ไปหาอะไรอร่อยๆ กินกันนะ กินอิ่มแล้วจะมีความสุขแน่นอน ลุย!"</div>
-        <div style="color: #2196f3; font-weight: bold; margin-top: 12px; text-align: center; font-size: 14px;">💧 อย่าลืมดื่มน้ำเยอะๆ และยิ้มกว้างๆ นะ 😊</div>
+        <div class="box-title">📊 เทคแคร์ & สุขภาพ</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <select style="font-size: 12px;"><option>ง่วง 100%</option><option>สดชื่น!</option></select>
+            <select style="font-size: 12px;"><option>ชิลล์จัด</option><option>ตึงมาก</option></select>
+        </div>
+        <div class="care-tip">🥤 <b>ดื่มอะไรดี:</b> นมเย็นๆ สักขวดรองท้องนะคนเก่ง</div>
+        <div style="color: #2196f3; font-weight: bold; margin-top: 8px; text-align: center; font-size: 12px;">💧 อย่าลืมดื่มน้ำเยอะๆ 😊</div>
     </div>
 </div>
 
-<button class="btn-save" onclick="saveImage()">📥 บันทึกเฉพาะตารางเรียน</button>
+<button class="btn-save" onclick="saveImage()">📥 บันทึกเฉพาะแผ่น Planner (ปุกปิก)</button>
 
 <div class="music-card">
-    <div style="text-align:center; color:var(--neon-pink); font-weight:700; margin-bottom:12px; font-size:14px;">🎵 GEN-Z MIX (กด Next ได้เลย!)</div>
-    <div style="height:160px; border-radius:20px; overflow:hidden;">
+    <div style="text-align:center; color:var(--neon-pink); font-weight:700; margin-bottom:10px; font-size:12px;">🎵 GEN-Z BOOSTER MIX (กด Next ได้เลย!)</div>
+    <div style="height:140px; border-radius:15px; overflow:hidden;">
         <iframe width="100%" height="100%" 
-            src="https://www.youtube.com/embed/Iu6g6a9KVHA?playlist=Iu6g6a9KVHA,aj6itxnuXHs,0I4Pi-spMFk,aBuK_dMi68c,6vh3K5wqRz4&autoplay=1&loop=1&controls=1" 
+            src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1&loop=1&controls=1" 
             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
         </iframe>
     </div>
 </div>
 
 <script>
-    function updateClock() {
-        const now = new Date();
-        document.getElementById('time-now').innerText = now.toLocaleDateString('th-TH') + " | " + now.toLocaleTimeString('th-TH') + " น.";
-    }
-    setInterval(updateClock, 1000);
+    // ดึงวันที่วันนี้
+    const now = new Date();
+    document.getElementById('date-today').value = "วันที่: " + now.toLocaleDateString('th-TH');
 
+    // ระบบกล้อง
     const video = document.getElementById('video');
     const photoResult = document.getElementById('photo-result');
+    const snapBtn = document.getElementById('snap-btn');
 
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
         .then(stream => { video.srcObject = stream; })
@@ -100,13 +126,15 @@
         photoResult.src = canvas.toDataURL('image/png');
         photoResult.style.display = 'block';
         video.style.display = 'none';
+        snapBtn.innerText = "📸 ถ่ายใหม่";
     }
 
+    // เซฟรูปภาพเฉาพะแผ่น Planner (id="capture-area")
     function saveImage() {
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 2 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'My-Zen-Planner.png';
+            link.download = 'My-Personal-Planner.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
