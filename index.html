@@ -10,30 +10,24 @@
         :root { --main-bg: #fdfaf5; --card-bg: #ffffff; --accent: #ff6b6b; --soft-blue: #e3f2fd; --genz-dark: #1a1a1a; --neon-pink: #ff2d55; }
         body { font-family: 'Kanit', sans-serif; background: var(--main-bg); color: #333; display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
-        /* Planner Card - ส่วนที่จะถูกบันทึกเป็นรูป */
         .planner-card { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 35px; padding: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid #fff0f0; margin-bottom: 20px; }
         h1 { font-family: 'Itim'; color: var(--accent); text-align: center; margin-bottom: 5px; font-size: 30px; }
         .greeting { text-align: center; font-size: 16px; margin-bottom: 15px; color: #777; font-family: 'Itim'; }
 
-        /* Camera Snapshot */
         #camera-area { width: 100%; height: 260px; background: #f0f0f0; border-radius: 25px; margin-bottom: 10px; overflow: hidden; position: relative; border: 2px dashed #ffb7c5; display: flex; align-items: center; justify-content: center; }
         #video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { display: none; }
         .btn-snap { background: #ffb7c5; color: white; border: none; padding: 8px 20px; border-radius: 50px; cursor: pointer; margin: 5px 0 15px; font-family: 'Itim'; font-size: 16px; }
 
-        /* Poem & Tips */
-        .poem-box { font-family: 'Itim'; font-size: 18px; text-align: center; color: #ff6b6b; line-height: 1.5; padding: 12px; border: 2px dashed #ffb7c5; border-radius: 20px; margin-bottom: 15px; background: #fff9f9; }
         .box { background: #fffcfc; padding: 15px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #fff5f5; }
         .box-title { font-weight: 700; margin-bottom: 10px; color: #ff8585; font-size: 16px; }
-        
-        /* Time Slot Style */
         .time-slot { display: flex; align-items: center; margin-bottom: 8px; }
         .time-label { width: 65px; font-weight: 700; color: #ff6b6b; font-size: 14px; }
-        input[type="text"] { flex: 1; border: none; border-bottom: 1px dashed #ddd; padding: 4px; font-family: 'Kanit'; font-size: 14px; outline: none; background: transparent; }
+        input[type="text"] { flex: 1; border: none; border-bottom: 1px dashed #ddd; padding: 4px; font-family: 'Kanit'; outline: none; background: transparent; }
 
+        .poem-box { font-family: 'Itim'; font-size: 18px; text-align: center; color: #ff6b6b; line-height: 1.5; padding: 12px; border: 2px dashed #ffb7c5; border-radius: 20px; margin-bottom: 15px; background: #fff9f9; }
         .care-tip { background: var(--soft-blue); padding: 10px; border-radius: 12px; font-size: 13px; margin-top: 8px; border-left: 5px solid #90caf9; }
         
-        /* UI Elements */
         .btn-save { width: 100%; max-width: 550px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 50px; font-size: 20px; cursor: pointer; margin-bottom: 20px; font-weight: bold; font-family: 'Itim'; box-shadow: 0 10px 20px rgba(255,107,107,0.3); }
         .music-card { background: var(--genz-dark); color: white; width: 100%; max-width: 550px; border-radius: 30px; padding: 20px; border: 2px solid var(--neon-pink); }
     </style>
@@ -66,23 +60,19 @@
 
     <div class="box">
         <div class="box-title">📊 สุขภาพ & เทคแคร์</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <select><option>ง่วงระดับ 10</option><option>ง่วงระดับ 5</option><option>สดชื่น!</option></select>
-            <select><option>ผ่อนคลาย</option><option>เครียดนิดๆ</option><option>ตึงมาก</option></select>
-        </div>
         <div class="care-tip">🥤 <b>ดื่มอะไรดี:</b> เช้านี้น้ำอัดลมซ่าๆ หรือนมเย็นๆ สักขวดนะ</div>
-        <div class="care-tip" style="background: #e8f5e9; color: #2e7d32; border-left: 5px solid #a5d6a7;">🍱 <b>หิวไหม:</b> ไปกินข้าวโรงประกอบกันนะคนเก่ง!</div>
+        <div class="care-tip" style="background: #e8f5e9; color: #2e7d32; border-left: 5px solid #a5d6a7;">🍱 <b>หิวไหม:</b> "ไปหาอะไรอร่อยๆ กินกันนะ กินอิ่มแล้วจะมีความสุขแน่นอน ลุย!"</div>
         <div style="color: #2196f3; font-weight: bold; margin-top: 12px; text-align: center; font-size: 14px;">💧 อย่าลืมดื่มน้ำเยอะๆ และยิ้มกว้างๆ นะ 😊</div>
     </div>
 </div>
 
-<button class="btn-save" onclick="saveImage()">📥 บันทึกแพลนเนอร์ (เฉพาะส่วนตาราง)</button>
+<button class="btn-save" onclick="saveImage()">📥 บันทึกเฉพาะตารางเรียน</button>
 
 <div class="music-card">
-    <div style="text-align:center; color:var(--neon-pink); font-weight:700; margin-bottom:12px; font-size:14px;">🎵 GEN-Z BOOSTER MIX (ถัดเพลงได้เลย!)</div>
+    <div style="text-align:center; color:var(--neon-pink); font-weight:700; margin-bottom:12px; font-size:14px;">🎵 GEN-Z MIX (กด Next ได้เลย!)</div>
     <div style="height:160px; border-radius:20px; overflow:hidden;">
         <iframe width="100%" height="100%" 
-            src="https://www.youtube.com/embed/videoseries?list=PL_Xv4Vf7_f9vA-mJ4p_2o6Y-Z7iO_4LpY&autoplay=1&loop=1&controls=1" 
+            src="https://www.youtube.com/embed/Iu6g6a9KVHA?playlist=Iu6g6a9KVHA,aj6itxnuXHs,0I4Pi-spMFk,aBuK_dMi68c,6vh3K5wqRz4&autoplay=1&loop=1&controls=1" 
             frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
         </iframe>
     </div>
