@@ -3,44 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editable GRWM Full Day</title>
+    <title>GRWM Sleep & Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --cream: #fdfaf5; --brown: #a89078; --pink: #fbc4ab; --dark: #4a443f; }
         body { font-family: 'Kanit', sans-serif; background: var(--cream); color: var(--dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
 
-        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
-        .start-btn { padding: 18px 50px; font-size: 22px; font-family: 'Itim'; background: var(--brown); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(168, 144, 120, 0.2); }
+        #overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .start-btn { padding: 18px 55px; font-size: 22px; font-family: 'Itim'; background: var(--brown); color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(168, 144, 120, 0.2); }
 
         .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; }
         h1 { font-family: 'Itim'; color: var(--brown); text-align: center; font-size: 30px; margin-bottom: 20px; }
 
+        /* 💤 Sleep Calculator Box */
+        .sleep-advice { background: #fef4f0; padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px dashed var(--pink); text-align: center; }
+        .sleep-advice h3 { margin: 0 0 10px 0; font-size: 16px; color: #d48b78; }
+        .sleep-time-display { font-size: 20px; font-weight: 700; color: var(--brown); font-family: 'Itim'; }
+
+        /* 📸 Camera */
         .snap-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
         #camera-box { width: 100%; height: 200px; background: #f9f9f9; border-radius: 30px; overflow: hidden; border: 2px solid var(--pink); position: relative; }
         #video, #photo-result { width: 100%; height: 100%; object-fit: cover; }
         #photo-result { display: none; position: absolute; top:0; left:0; }
         .snap-btn { align-self: center; border: none; background: var(--pink); color: #7a5c56; border-radius: 50px; padding: 10px 25px; font-family: 'Itim'; cursor: pointer; }
 
+        /* ⏰ Timeline */
         .timeline { background: #fffcf9; padding: 20px; border-radius: 30px; border: 1px solid #f0f0f0; margin-bottom: 20px; }
         .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); padding-bottom: 8px; }
-        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 6px; border-radius: 10px; font-family: 'Kanit'; font-size: 14px; color: var(--brown); font-weight: bold; width: 90px; cursor: pointer; }
+        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 6px; border-radius: 10px; font-family: 'Kanit'; font-size: 14px; color: var(--brown); font-weight: bold; width: 90px; }
         .time-row input[type="text"] { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #555; }
-        .time-row input[type="text"]:focus { border-bottom: 1px solid var(--pink); }
 
-        .save-btn { background: var(--brown); color: white; border: none; padding: 18px 50px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .save-btn { background: var(--brown); color: white; border: none; padding: 18px 50px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <h2 style="font-family:'Itim'; color:var(--brown); margin-bottom:20px;">Get Ready With Me ✨</h2>
-    <button class="start-btn" onclick="startApp()">Enter & Edit Plan</button>
+    <h2 style="font-family:'Itim'; color:var(--brown); margin-bottom:20px;">Let's Plan Your Day & Sleep ✨</h2>
+    <button class="start-btn" onclick="startApp()">Start My Journey</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
-    <h1>My Full Day Plan</h1>
+    <h1>Morning Routine</h1>
     
+    <div class="sleep-advice">
+        <h3>🌙 เข้านอนตอนไหนดี?</h3>
+        <div id="sleep-result" class="sleep-time-display">กำลังคำนวณจากเวลาตื่นของคุณ...</div>
+        <p style="font-size: 11px; color: #a5a5a5; margin-top: 5px;">*อิงจากรอบการนอน 90 นาที เพื่อให้ตื่นมาไม่เพลีย</p>
+    </div>
+
     <div class="snap-section">
         <div id="camera-box">
             <video id="video" autoplay playsinline></video>
@@ -51,95 +63,13 @@
     </div>
 
     <div class="timeline">
-        <div style="font-weight:700; color:var(--brown); margin-bottom:15px; font-size:15px;">จิ้มที่ "เวลา" หรือ "ข้อความ" เพื่อแก้ไขได้เลย:</div>
-        <div id="rows-container">
-            </div>
+        <div style="font-weight:700; color:var(--brown); margin-bottom:15px; font-size:14px;">⏰ Timeline (แก้ไขเวลาตื่นเพื่อดูเวลาเข้านอน)</div>
+        <div id="rows-container"></div>
     </div>
     
-    <div style="text-align: center; font-family:'Itim'; opacity: 0.5; font-size: 13px;">"Make every minute count"</div>
+    <div style="text-align: center; font-family:'Itim'; opacity: 0.5; font-size: 13px;">"Good Sleep, Good Life"</div>
 </div>
 
 <button class="save-btn" onclick="doPrint()">Save This Vibe ✨</button>
 
-<audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
-
-<script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const bgMusic = document.getElementById('bg-music');
-
-    function playSynthSound(freq, type, duration, vol) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    }
-
-    const schedules = [
-        { t: "06:00", d: "Wake up & Skincare 🧴" },
-        { t: "07:30", d: "Ovaltine & Breakfast 🥤" },
-        { t: "09:00", d: "Start Studying / Work" },
-        { t: "12:00", d: "Lunch Break 🍱" },
-        { t: "15:00", d: "Afternoon Snack 🍎" },
-        { t: "18:00", d: "Exercise / Relax Walk" },
-        { t: "20:00", d: "Dinner Time" },
-        { t: "22:00", d: "Night Routine 📖" }
-    ];
-
-    const container = document.getElementById('rows-container');
-    schedules.forEach(item => {
-        container.innerHTML += `
-            <div class="time-row">
-                <input type="time" value="${item.t}" onchange="playSynthSound(500, 'sine', 0.1, 0.05)">
-                <input type="text" value="${item.d}" oninput="playSynthSound(150, 'triangle', 0.02, 0.03)" placeholder="พิมพ์กิจกรรมที่นี่...">
-            </div>
-        `;
-    });
-
-    function startApp() {
-        audioCtx.resume();
-        document.getElementById('overlay').style.opacity = '0';
-        setTimeout(() => document.getElementById('overlay').style.display = 'none', 500);
-        bgMusic.volume = 0.2;
-        bgMusic.play();
-        initCamera();
-    }
-
-    const video = document.getElementById('video');
-    const photoImg = document.getElementById('photo-result');
-
-    async function initCamera() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-            video.srcObject = stream;
-        } catch (err) { console.log("Camera access denied"); }
-    }
-
-    function takeSnap() {
-        playSynthSound(800, 'sine', 0.2, 0.05);
-        const canvas = document.getElementById('hidden-canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        photoImg.src = canvas.toDataURL('image/png');
-        photoImg.style.display = 'block';
-    }
-
-    function doPrint() {
-        playSynthSound(300, 'sine', 0.5, 0.1);
-        const area = document.getElementById('capture-area');
-        html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'My-Custom-GRWM.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-    }
-</script>
-</body>
-</html>
+<audio id="bg-music" loop src="
