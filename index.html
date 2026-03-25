@@ -3,55 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GRWM 06:00 AM Morning Vibe</title>
+    <title>Ultimate GRWM Full Day Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --soft-cream: #f9f6f2; --aesthetic-brown: #a89078; --misty-rose: #eac8c1; --text-dark: #4a443f; }
-        body { font-family: 'Kanit', sans-serif; background: var(--soft-cream); color: var(--text-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; transition: 0.5s; }
+        :root { --soft-cream: #f9f6f2; --aesthetic-brown: #a89078; --misty-rose: #eac8c1; --text-dark: #4a443f; --glass: rgba(255, 255, 255, 0.7); }
+        body { font-family: 'Kanit', sans-serif; background: var(--soft-cream); color: var(--text-dark); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; min-height: 100vh; }
 
-        /* 🎀 GRWM Start Overlay */
-        #overlay { position: fixed; inset: 0; background: #fff; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .start-btn { padding: 18px 50px; font-size: 22px; font-family: 'Itim'; background: var(--aesthetic-brown); color: white; border: none; border-radius: 100px; cursor: pointer; letter-spacing: 1px; box-shadow: 0 10px 25px rgba(168, 144, 120, 0.2); }
-        .start-btn:hover { background: #8e7964; transform: scale(1.02); }
+        /* 🎀 Start Overlay */
+        #overlay { position: fixed; inset: 0; background: #fff; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.8s; }
+        .start-btn { padding: 18px 60px; font-size: 22px; font-family: 'Itim'; background: var(--aesthetic-brown); color: white; border: none; border-radius: 100px; cursor: pointer; box-shadow: 0 10px 20px rgba(168, 144, 120, 0.2); }
 
-        /* 📜 Aesthetic Planner */
-        .planner-paper { background: white; width: 100%; max-width: 480px; border-radius: 35px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.03); border: 1px solid rgba(168, 144, 120, 0.1); position: relative; background-image: radial-gradient(#d1d1d1 0.5px, transparent 0.5px); background-size: 20px 20px; }
-        h1 { font-family: 'Itim'; color: var(--aesthetic-brown); text-align: center; font-size: 28px; margin-bottom: 25px; letter-spacing: 1px; }
+        /* 📜 Large Planner Paper */
+        .planner-paper { background: white; width: 100%; max-width: 500px; border-radius: 40px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.03); border: 1px solid rgba(168,144,120,0.1); position: relative; background-image: radial-gradient(#d1d1d1 0.5px, transparent 0.5px); background-size: 24px 24px; }
+        h1 { font-family: 'Itim'; color: var(--aesthetic-brown); text-align: center; font-size: 30px; margin-bottom: 25px; }
 
-        /* 📸 Snapshot ASMR Area */
-        .snap-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; align-items: center; }
-        #camera-box { width: 100%; height: 200px; background: #fdfdfd; border-radius: 25px; overflow: hidden; border: 1.5px solid var(--misty-rose); position: relative; }
-        #video, #photo-result { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.1) contrast(1.05); }
+        /* 📸 Snapshot Area */
+        .snap-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+        #camera-box { width: 100%; height: 220px; background: #fafafa; border-radius: 30px; overflow: hidden; border: 1.5px solid var(--misty-rose); position: relative; }
+        #video, #photo-result { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.05) contrast(1.02); }
         #photo-result { display: none; position: absolute; top:0; left:0; }
-        .poem-box { font-family: 'Itim'; font-size: 16px; color: #7a736d; text-align: center; font-style: italic; background: #faf8f6; padding: 15px; border-radius: 20px; width: 100%; box-sizing: border-box; }
+        .snap-btn { align-self: center; border: none; background: var(--misty-rose); color: #7a5c56; border-radius: 50px; padding: 8px 25px; font-family: 'Itim'; cursor: pointer; font-size: 14px; }
 
-        /* ⏰ GRWM Timeline (Editable) */
-        .box { background: rgba(255,255,255,0.6); padding: 20px; border-radius: 25px; margin-bottom: 20px; border: 1px solid #f0f0f0; }
-        .time-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 6px 12px; border-radius: 12px; font-family: 'Kanit'; font-size: 14px; color: var(--aesthetic-brown); font-weight: bold; }
-        .time-row input[type="text"] { flex: 1; border: none; border-bottom: 1px solid #eee; outline: none; background: transparent; font-size: 15px; color: #555; }
+        /* ⏰ Extensive Timeline (10+ Rows) */
+        .timeline-container { background: var(--glass); padding: 20px; border-radius: 30px; border: 1px solid #f0f0f0; margin-bottom: 25px; }
+        .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .time-row:last-child { border-bottom: none; }
+        .time-row input[type="time"] { border: none; background: #f4efeb; padding: 5px 10px; border-radius: 10px; font-family: 'Kanit'; font-size: 13px; color: var(--aesthetic-brown); font-weight: bold; width: 85px; cursor: pointer; }
+        .time-row input[type="text"] { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: #555; font-family: 'Kanit'; }
 
-        /* 🎵 Aesthetic Music Player */
-        .music-player { display: flex; gap: 12px; margin: 20px 0; background: white; padding: 10px 20px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .mood-btn { border: none; background: none; font-size: 20px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
+        /* 🎵 Mood Player */
+        .player-wrap { display: flex; gap: 15px; margin: 20px 0; background: white; padding: 12px 25px; border-radius: 100px; box-shadow: 0 5px 20px rgba(0,0,0,0.02); }
+        .mood-btn { border: none; background: none; font-size: 22px; cursor: pointer; filter: grayscale(1); transition: 0.3s; }
         .mood-btn.active { filter: grayscale(0) scale(1.2); }
 
-        /* 🖨️ Minimalist Save Button */
-        .save-btn { background: var(--aesthetic-brown); color: white; border: none; padding: 18px 45px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .save-btn:active { transform: scale(0.98); }
+        .save-btn { background: var(--aesthetic-brown); color: white; border: none; padding: 20px 60px; border-radius: 100px; font-family: 'Itim'; font-size: 20px; cursor: pointer; transition: 0.3s; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <div style="font-size: 40px; margin-bottom: 20px;">☕</div>
-    <h2 style="font-family:'Itim'; color:var(--aesthetic-brown); margin-bottom:30px;">Get Ready with Me</h2>
-    <button class="start-btn sfx-soft" onclick="startApp()">Start My 06:00 AM</button>
+    <div style="font-size: 50px; margin-bottom: 20px;">🎧</div>
+    <h2 style="font-family:'Itim'; color:var(--aesthetic-brown); margin-bottom:30px;">Get Ready With Me: Full Day</h2>
+    <button class="start-btn sfx-soft" onclick="startApp()">Enter My Space</button>
 </div>
 
 <div class="planner-paper" id="capture-area">
-    <h1>Morning Routine</h1>
+    <h1>Daily Routine</h1>
     
     <div class="snap-section">
         <div id="camera-box">
@@ -59,59 +57,87 @@
             <canvas id="hidden-canvas" style="display:none;"></canvas>
             <img id="photo-result">
         </div>
-        <div class="poem-box">
-            "ตื่นมาในเช้าที่แสนนุ่มนวล<br>เริ่มต้นก้าวแรกอย่างตั้งใจ<br>วันนี้คือวันแห่งความสุขของคุณ"
-        </div>
-        <button onclick="takeSnap()" class="sfx-camera" style="border:none; background:var(--misty-rose); color:#7a5c56; border-radius:50px; padding:8px 20px; font-family:'Itim'; cursor:pointer; font-size:14px;">📸 Snapshot</button>
+        <button onclick="takeSnap()" class="snap-btn sfx-camera">📸 Take a Snap</button>
     </div>
 
-    <div class="box">
+    <div class="timeline-container">
+        <div style="font-weight:700; color:var(--aesthetic-brown); margin-bottom:15px; font-size:15px;">⏰ Full Day Journey (แก้ไขเวลาได้)</div>
+        
         <div class="time-row">
             <input type="time" value="06:00" class="sfx-soft">
-            <input type="text" value="Wake up & Skincare 🧴" class="sfx-asmr">
+            <input type="text" value="Wake up & Refresh ☁️" class="sfx-asmr">
         </div>
         <div class="time-row">
-            <input type="time" value="07:00" class="sfx-soft">
-            <input type="text" value="Coffee or Ovaltine Time ☕" class="sfx-asmr">
+            <input type="time" value="06:30" class="sfx-soft">
+            <input type="text" value="Skincare & Morning Prep 🧴" class="sfx-asmr">
         </div>
         <div class="time-row">
-            <input type="time" value="08:00" class="sfx-soft">
-            <input type="text" placeholder="Start Daily Journey" class="sfx-asmr">
+            <input type="time" value="07:30" class="sfx-soft">
+            <input type="text" value="Ovaltine & Healthy Breakfast 🥤" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="09:00" class="sfx-soft">
+            <input type="text" placeholder="Deep Work / Class Session 1" class="sfx-asmr">
         </div>
         <div class="time-row">
             <input type="time" value="12:00" class="sfx-soft">
-            <input type="text" placeholder="Lunch Break" class="sfx-asmr">
+            <input type="text" value="Mindful Lunch 🍱" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="13:30" class="sfx-soft">
+            <input type="text" placeholder="Session 2 / Productivity" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="16:00" class="sfx-soft">
+            <input type="text" placeholder="Break & Snack Time 🍎" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="18:00" class="sfx-soft">
+            <input type="text" value="Workout or Sunset Walk 🏃‍♀️" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="19:30" class="sfx-soft">
+            <input type="text" value="Dinner & Relax with Family" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="21:30" class="sfx-soft">
+            <input type="text" value="Night Routine & Reading 📖" class="sfx-asmr">
+        </div>
+        <div class="time-row">
+            <input type="time" value="23:00" class="sfx-soft">
+            <input type="text" value="Off to Sleep... Good Night 😴" class="sfx-asmr">
         </div>
     </div>
 
-    <div style="text-align: center; color: var(--aesthetic-brown); font-family: 'Itim'; font-size: 14px; opacity: 0.7;">
-        — be kind to yourself today —
+    <div style="text-align: center; opacity: 0.5; font-size: 12px; letter-spacing: 2px;">
+        EST. 2026 • GRWM VIBES
     </div>
 </div>
 
-<div class="music-player">
+<div class="player-wrap">
     <button class="mood-btn sfx-soft active" onclick="playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', this)">📻</button>
     <button class="mood-btn sfx-soft" onclick="playMusic('https://actions.google.com/sounds/v1/water/rain_on_roof.ogg', this)">🌧️</button>
     <button class="mood-btn sfx-soft" onclick="playMusic('https://actions.google.com/sounds/v1/nature_and_animals/birds_singing.ogg', this)">🍃</button>
     <button class="mood-btn sfx-soft" onclick="toggleMute()">🔇</button>
 </div>
 
-<button class="save-btn sfx-save" onclick="doPrint()">Save Daily Vibe ✨</button>
+<button class="save-btn sfx-save" onclick="doPrint()">Save Full Day Vibe ✨</button>
 
 <audio id="bg-music" loop></audio>
-<audio id="soft-click" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio> <audio id="asmr-type" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio> <audio id="camera-shutter" src="https://assets.mixkit.co/active_storage/sfx/544/544-preview.mp3"></audio>
+<audio id="soft-click" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio> 
+<audio id="asmr-type" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio> 
+<audio id="camera-sfx" src="https://assets.mixkit.co/active_storage/sfx/544/544-preview.mp3"></audio>
 <audio id="save-sfx" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3"></audio>
 
 <script>
     const bgMusic = document.getElementById('bg-music');
     const softClick = document.getElementById('soft-click');
     const asmrType = document.getElementById('asmr-type');
-    const cameraSfx = document.getElementById('camera-shutter');
+    const cameraSfx = document.getElementById('camera-sfx');
     const saveSfx = document.getElementById('save-sfx');
 
     function startApp() {
         document.getElementById('overlay').style.opacity = '0';
-        document.getElementById('overlay').style.transform = 'scale(1.1)';
         setTimeout(() => document.getElementById('overlay').style.display = 'none', 800);
         initCamera();
         playMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', document.querySelector('.mood-btn'));
@@ -119,7 +145,7 @@
 
     function playMusic(src, btn) {
         bgMusic.src = src;
-        bgMusic.volume = 0.3;
+        bgMusic.volume = 0.25;
         bgMusic.play();
         document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
         if(btn) btn.classList.add('active');
@@ -127,11 +153,10 @@
 
     function toggleMute() { bgMusic.paused ? bgMusic.play() : bgMusic.pause(); }
 
-    // ASMR Interaction
     document.addEventListener('click', (e) => {
-        if(e.target.classList.contains('sfx-soft')) {
+        if(e.target.classList.contains('sfx-soft') || e.target.closest('.sfx-soft')) {
             softClick.currentTime = 0;
-            softClick.volume = 0.2;
+            softClick.volume = 0.15;
             softClick.play();
         }
     });
@@ -139,19 +164,18 @@
     document.addEventListener('input', (e) => {
         if(e.target.classList.contains('sfx-asmr')) {
             asmrType.currentTime = 0;
-            asmrType.volume = 0.15;
+            asmrType.volume = 0.1;
             asmrType.play();
         }
     });
 
-    // Camera
     const video = document.getElementById('video');
     const photoImg = document.getElementById('photo-result');
     async function initCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-        } catch (err) { console.log("Camera access denied"); }
+        } catch (err) { console.log("Camera Off"); }
     }
 
     function takeSnap() {
@@ -169,7 +193,7 @@
         const area = document.getElementById('capture-area');
         html2canvas(area, { useCORS: true, scale: 3 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'GRWM-Morning.png';
+            link.download = 'GRWM-FullDay-Planner.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
